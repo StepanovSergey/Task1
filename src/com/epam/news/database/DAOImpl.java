@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 
 import com.epam.news.bean.News;
 
-
 /**
  * This class provides DAO implementation
  * 
@@ -29,12 +28,12 @@ public class DAOImpl implements DAO {
 	try {
 	    Statement statement = connection.createStatement();
 	    ResultSet resultSet = statement.executeQuery("SELECT * FROM news");
-	    while (resultSet.next()){
+	    while (resultSet.next()) {
 		News news = setParameters(resultSet);
 		allNews.add(news);
 	    }
 	} catch (SQLException e) {
-	    log.error(e.getMessage());
+	    log.error(e.getMessage(), e);
 	}
 	return allNews;
     }
@@ -45,12 +44,15 @@ public class DAOImpl implements DAO {
 	Connection connection = ConnectionPool.getConnection();
 	PreparedStatement preparedStatement;
 	try {
-	    preparedStatement = connection.prepareStatement("Select * from news where id=?");
-	    preparedStatement.setInt(0, id);
+	    preparedStatement = connection
+		    .prepareStatement("Select * from news where id=?");
+	    preparedStatement.setInt(1, id);
 	    ResultSet resultSet = preparedStatement.executeQuery();
-	    news = setParameters(resultSet);
+	    while (resultSet.next()) {
+		news = setParameters(resultSet);
+	    }
 	} catch (SQLException e) {
-	    log.error(e.getMessage());
+	    log.error(e.getMessage(), e);
 	}
 	return news;
     }
@@ -72,8 +74,8 @@ public class DAOImpl implements DAO {
 	// TODO Auto-generated method stub
 
     }
-    
-    private News setParameters(ResultSet resultSet){
+
+    private News setParameters(ResultSet resultSet) {
 	News news = new News();
 	try {
 	    news.setId(resultSet.getInt("id"));
@@ -82,7 +84,7 @@ public class DAOImpl implements DAO {
 	    news.setBrief(resultSet.getString("brief"));
 	    news.setContent(resultSet.getString("content"));
 	} catch (SQLException e) {
-	    log.error(e.getMessage());
+	    log.error(e.getMessage(), e);
 	}
 	return news;
     }
