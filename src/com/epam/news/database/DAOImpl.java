@@ -20,20 +20,31 @@ import com.epam.news.bean.News;
  */
 public class DAOImpl implements DAO {
     private static final Logger log = Logger.getLogger(DAOImpl.class);
+    private Connection connection;
+    private Statement statement = null;
+    private ResultSet resultSet = null;
+    private PreparedStatement preparedStatement = null;
+    private static final String getAllQuery = "SELECT * FROM news";
+    private static final String getByIdQuery = "SELECT * FROM news WHERE id=?";
+    private static final String addNewsQuery = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
+    private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? where id=?";
 
     @Override
     public List<News> getAll() {
 	List<News> allNews = new ArrayList<News>();
 	Connection connection = ConnectionPool.getConnection();
 	try {
-	    Statement statement = connection.createStatement();
-	    ResultSet resultSet = statement.executeQuery("SELECT * FROM news");
+	    statement = connection.createStatement();
+	    resultSet = statement.executeQuery(getAllQuery);
 	    while (resultSet.next()) {
 		News news = setParameters(resultSet);
 		allNews.add(news);
 	    }
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
+	} finally {
+	    releaseResources(statement, resultSet);
+	    ConnectionPool.releaseConnection(connection);
 	}
 	return allNews;
     }
@@ -42,10 +53,8 @@ public class DAOImpl implements DAO {
     public News getById(int id) {
 	News news = new News();
 	Connection connection = ConnectionPool.getConnection();
-	PreparedStatement preparedStatement;
 	try {
-	    preparedStatement = connection
-		    .prepareStatement("Select * from news where id=?");
+	    preparedStatement = connection.prepareStatement(getByIdQuery);
 	    preparedStatement.setInt(1, id);
 	    ResultSet resultSet = preparedStatement.executeQuery();
 	    while (resultSet.next()) {
@@ -53,24 +62,58 @@ public class DAOImpl implements DAO {
 	    }
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
+	} finally {
+	    releaseResources(statement, resultSet);
+	    ConnectionPool.releaseConnection(connection);
 	}
 	return news;
     }
 
     @Override
     public void addNews(News news) {
-	// TODO Auto-generated method stub
-
+	connection = ConnectionPool.getConnection();
+	try {
+	    preparedStatement = connection.prepareStatement(addNewsQuery);
+	    preparedStatement.setString(1, news.getTitle());
+	    preparedStatement.setDate(2, news.getDate());
+	    preparedStatement.setString(3, news.getBrief());
+	    preparedStatement.setString(4, news.getContent());
+	    preparedStatement.executeUpdate();
+	} catch (SQLException e) {
+	    log.error(e.getMessage(), e);
+	} finally {
+	    releaseResources(statement, resultSet);
+	    ConnectionPool.releaseConnection(connection);
+	}
     }
 
     @Override
-    public void updateNews(int id) {
-	// TODO Auto-generated method stub
-
+    public void updateNews(News news) {
+	connection = ConnectionPool.getConnection();
+	try {
+	    preparedStatement = connection.prepareStatement(updateNewsQuery);
+	    preparedStatement.setString(1, news.getTitle());
+	    preparedStatement.setDate(2, news.getDate());
+	    preparedStatement.setString(3, news.getBrief());
+	    preparedStatement.setString(4, news.getContent());
+	    preparedStatement.setInt(5, news.getId());
+	    preparedStatement.executeUpdate();
+	} catch (SQLException e) {
+	    log.error(e.getMessage(), e);
+	} finally {
+	    releaseResources(statement, resultSet);
+	    ConnectionPool.releaseConnection(connection);
+	}
     }
 
     @Override
     public void deleteNews(int id) {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void deleteManyNews(Integer[] ids) {
 	// TODO Auto-generated method stub
 
     }
@@ -89,4 +132,20 @@ public class DAOImpl implements DAO {
 	return news;
     }
 
+    private void releaseResources(Statement statement, ResultSet resultSet) {
+	if (statement != null) {
+	    try {
+		statement.close();
+	    } catch (SQLException e) {
+		log.error(e.getMessage(), e);
+	    }
+	}
+	if (resultSet != null) {
+	    try {
+		resultSet.close();
+	    } catch (SQLException e) {
+		log.error(e.getMessage(), e);
+	    }
+	}
+    }
 }

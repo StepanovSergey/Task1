@@ -3,6 +3,7 @@ package com.epam.news.database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Semaphore;
@@ -17,10 +18,10 @@ import org.apache.log4j.Logger;
  */
 public class ConnectionPool {
     private static final Logger log = Logger.getLogger(ConnectionPool.class);
-    public static final String driverClass = "oracle.jdbc.driver.OracleDriver";
-    public static final String URI = "jdbc:oracle:thin:@localhost:1521:XE";
-    public static final String user = "SYSTEM";
-    public static final String password = "root";
+    private static final String driverClass = "oracle.jdbc.driver.OracleDriver";
+    private static final String URI = "jdbc:oracle:thin:@localhost:1521:XE";
+    private static final String user = "SYSTEM";
+    private static final String password = "root";
     private static final int poolSize = 5;
     private static ConnectionPool instance = new ConnectionPool();
     private static Queue<Connection> occupiedConnections = new ConcurrentLinkedQueue<Connection>();
@@ -30,6 +31,9 @@ public class ConnectionPool {
     private ConnectionPool() {
     }
 
+    /**
+     * Initialize connection pool
+     */
     public static void init() {
 	try {
 	    Class.forName(driverClass);
@@ -38,10 +42,16 @@ public class ConnectionPool {
 		freeConnections.add(connection);
 	    }
 	} catch (ClassNotFoundException e) {
-	    log.error(e.getMessage());
+	    log.error(e.getMessage(), e);
 	}
     }
 
+    /**
+     * Get connection from pool. If there is no connections available, thread
+     * will wait for free connection
+     * 
+     * @return connection
+     */
     public static Connection getConnection() {
 	Connection connection = null;
 	try {
@@ -49,11 +59,16 @@ public class ConnectionPool {
 	    connection = freeConnections.poll();
 	    occupiedConnections.add(connection);
 	} catch (InterruptedException e) {
-	    log.error(e.getMessage());
+	    log.error(e.getMessage(), e);
 	}
 	return connection;
     }
 
+    /**
+     * Get instance of connection pool
+     * 
+     * @return connection pool instance
+     */
     public static ConnectionPool getInstance() {
 	return instance;
     }
@@ -63,21 +78,49 @@ public class ConnectionPool {
 	try {
 	    connection = DriverManager.getConnection(URI, user, password);
 	} catch (SQLException e) {
-	    log.error(e.getMessage());
+	    log.error(e.getMessage(), e);
 	}
 	return connection;
     }
 
+    /**
+     * Releases used connection to pool. If released connection is closed, pool
+     * create new connection.
+     * 
+     * @param connection
+     *            connection to release
+     */
     public static void releaseConnection(Connection connection) {
 	occupiedConnections.remove(connection);
 	try {
 	    if (connection.isClosed()) {
 		connection = openConnection();
 	    }
+	} catch (SQLException e) {
+	    log.error(e.getMessage(), e);
+	} finally {
 	    freeConnections.add(connection);
 	    semaphore.release();
-	} catch (SQLException e) {
-	    log.error(e.getMessage());
+	}
+    }
+
+    /**
+     * Close all connections of application
+     */
+    public static void closeAllConnections() {
+	closeConnectionsOfQueue(freeConnections);
+	closeConnectionsOfQueue(occupiedConnections);
+    }
+
+    private static void closeConnectionsOfQueue(Queue<Connection> queue) {
+	Iterator<Connection> iterator = queue.iterator();
+	while (iterator.hasNext()) {
+	    Connection connection = iterator.next();
+	    try {
+		connection.close();
+	    } catch (SQLException e) {
+		log.error(e.getMessage(), e);
+	    }
 	}
     }
 }

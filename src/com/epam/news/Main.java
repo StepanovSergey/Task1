@@ -1,8 +1,6 @@
 package com.epam.news;
 
-import com.epam.news.bean.News;
 import com.epam.news.database.ConnectionPool;
-import com.epam.news.database.DAOImpl;
 
 /**
  * Main test class
@@ -18,11 +16,13 @@ public class Main {
     public static void main(String[] args) {
 
 	ConnectionPool.init();
-	DAOImpl dao = new DAOImpl();
-	News news = new News();
-	news = dao.getById(1);
-	System.out.println(news);
-
+	/*
+	 * DAOImpl dao = new DAOImpl(); News news = new News(); news =
+	 * dao.getById(1); System.out.println(news);
+	 */
+	for (int i = 0; i < 8; i++) {
+	    TestThread th = new TestThread("th" + i);
+	}
 	/*
 	 * try { Class.forName(ConnectionPool.driverClass); Connection
 	 * connection = DriverManager.getConnection( ConnectionPool.URI,
