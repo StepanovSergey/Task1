@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public class ConnectionPool {
     private static final Logger log = Logger.getLogger(ConnectionPool.class);
     public static final String driverClass = "oracle.jdbc.driver.OracleDriver";
-    public static final String URI = "jdbc:oracle:thin:@localhost:1521:ORCL";
+    public static final String URI = "jdbc:oracle:thin:@localhost:1521:XE";
     public static final String user = "SYSTEM";
     public static final String password = "root";
     private static final int poolSize = 5;
@@ -41,8 +41,8 @@ public class ConnectionPool {
 	    log.error(e.getMessage());
 	}
     }
-    
-    public static Connection getConnection(){
+
+    public static Connection getConnection() {
 	Connection connection = null;
 	try {
 	    semaphore.acquire();
@@ -67,12 +67,12 @@ public class ConnectionPool {
 	}
 	return connection;
     }
-    
-    public static void releaseConnection(Connection connection){
+
+    public static void releaseConnection(Connection connection) {
 	occupiedConnections.remove(connection);
 	try {
-	    if(connection.isClosed()){
-	        connection = openConnection();
+	    if (connection.isClosed()) {
+		connection = openConnection();
 	    }
 	    freeConnections.add(connection);
 	    semaphore.release();
