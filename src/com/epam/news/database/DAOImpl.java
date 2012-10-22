@@ -1,6 +1,7 @@
 package com.epam.news.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,6 +28,7 @@ public class DAOImpl implements DAO {
 	try {
 	    Statement statement = connection.createStatement();
 	    ResultSet resultSet = statement.executeQuery("SELECT * FROM news");
+	    
 	} catch (SQLException e) {
 	    log.error(e.getMessage());
 	}
@@ -35,8 +37,18 @@ public class DAOImpl implements DAO {
 
     @Override
     public News getById(int id) {
-	// TODO Auto-generated method stub
-	return null;
+	News news = new News();
+	Connection connection = ConnectionPool.getConnection();
+	PreparedStatement preparedStatement;
+	try {
+	    preparedStatement = connection.prepareStatement("Select * from news where id=?");
+	    preparedStatement.setInt(0, id);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    news = setParameters(resultSet);
+	} catch (SQLException e) {
+	    log.error(e.getMessage());
+	}
+	return news;
     }
 
     @Override
@@ -57,6 +69,18 @@ public class DAOImpl implements DAO {
 
     }
     
-    private 
+    private News setParameters(ResultSet resultSet){
+	News news = new News();
+	try {
+	    news.setId(resultSet.getInt("id"));
+	    news.setTitle(resultSet.getString("title"));
+	    news.setDate(resultSet.getDate("news_date"));
+	    news.setBrief(resultSet.getString("brief"));
+	    news.setContent(resultSet.getString("content"));
+	} catch (SQLException e) {
+	    log.error(e.getMessage());
+	}
+	return news;
+    }
 
 }
