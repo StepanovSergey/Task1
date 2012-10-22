@@ -17,10 +17,10 @@ import org.apache.log4j.Logger;
  */
 public class ConnectionPool {
     private static final Logger log = Logger.getLogger(ConnectionPool.class);
-    private static final String driverClass = "oracle.jdbc.driver.OracleDriver";
-    private static final String URI = "jdbc:oracle:thin:@localhost:8080:SYSTEM";
-    private static final String user = "SYSTEM";
-    private static final String password = "root";
+    public static final String driverClass = "oracle.jdbc.driver.OracleDriver";
+    public static final String URI = "jdbc:oracle:thin:@localhost:1521:ORCL";
+    public static final String user = "SYSTEM";
+    public static final String password = "root";
     private static final int poolSize = 5;
     private static ConnectionPool instance = new ConnectionPool();
     private static Queue<Connection> occupiedConnections = new ConcurrentLinkedQueue<Connection>();

@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.epam.news.bean.News;
 
+
 /**
  * This class provides DAO implementation
  * 
@@ -28,7 +29,10 @@ public class DAOImpl implements DAO {
 	try {
 	    Statement statement = connection.createStatement();
 	    ResultSet resultSet = statement.executeQuery("SELECT * FROM news");
-	    
+	    while (resultSet.next()){
+		News news = setParameters(resultSet);
+		allNews.add(news);
+	    }
 	} catch (SQLException e) {
 	    log.error(e.getMessage());
 	}
