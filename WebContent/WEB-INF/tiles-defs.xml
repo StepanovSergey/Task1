@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+  "http://struts.apache.org/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+	<definition name="index.page" path="/jsp/layout.jsp">
+		<put name="header" value="/jsp/tiles/header.jsp" />
+		<put name="body" value="/jsp/tiles/registration.jsp" />
+	</definition>
+	<definition name="congratulation.page" extends="index.page">
+		<put name="body" value="jsp/tiles/congratulation.jsp" />
+	</definition>
+</tiles-definitions>
