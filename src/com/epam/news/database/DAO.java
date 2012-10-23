@@ -48,14 +48,6 @@ public interface DAO {
     public void updateNews(News news);
 
     /**
-     * Delete news by id
-     * 
-     * @param id
-     *            id of the news to delete
-     */
-    public void deleteNews(int id);
-
-    /**
      * Delete many news by ids
      * 
      * @param ids

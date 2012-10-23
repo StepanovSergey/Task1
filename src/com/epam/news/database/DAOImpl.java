@@ -27,7 +27,8 @@ public class DAOImpl implements DAO {
     private static final String getAllQuery = "SELECT * FROM news";
     private static final String getByIdQuery = "SELECT * FROM news WHERE id=?";
     private static final String addNewsQuery = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
-    private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? where id=?";
+    private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";
+    private static final String deleteManyNewsQuery = "DELETE FROM news WHERE id IN (";
 
     @Override
     public List<News> getAll() {
@@ -107,15 +108,32 @@ public class DAOImpl implements DAO {
     }
 
     @Override
-    public void deleteNews(int id) {
-	// TODO Auto-generated method stub
-
+    public void deleteManyNews(Integer[] ids) {
+	Connection connection = ConnectionPool.getConnection();
+	try {
+	    statement = connection.createStatement();
+	    String deleteManyNewsQuery = createDeleteManyNewsQuery(ids);
+	    statement.executeUpdate(deleteManyNewsQuery);
+	} catch (SQLException e) {
+	    log.error(e.getMessage(), e);
+	} finally {
+	    releaseResources(statement, resultSet);
+	    ConnectionPool.releaseConnection(connection);
+	}
     }
 
-    @Override
-    public void deleteManyNews(Integer[] ids) {
-	// TODO Auto-generated method stub
-
+    private String createDeleteManyNewsQuery(Integer[] ids) {
+	StringBuffer query = new StringBuffer(deleteManyNewsQuery);
+	Integer lastId = ids[ids.length - 1];
+	for (Integer id : ids) {
+	    query.append(id);
+	    if (lastId.equals(id)) {
+		query.append(")");
+	    } else {
+		query.append(",");
+	    }
+	}
+	return query.toString();
     }
 
     private News setParameters(ResultSet resultSet) {
