@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+.main_table{
+	width: 100%;
+}
+.header_name{
+	height: 50px;
+	width: 80%;
+}
+.header_languages{
+	text-align: right;
+}
