@@ -37,7 +37,8 @@
 				</div>
 			</td>
 			<!-- Content -->
-			<td class="content"><html:form action="/index">
+			<td class="content">
+			<html:form action="/index">
 					<table>
 						<tr>
 							<td>Name:</td>
@@ -47,7 +48,8 @@
 							<td><html:submit /></td>
 						</tr>
 					</table>
-				</html:form> Some text<br> Some text<br> Some text<br> Some text<br>
+				</html:form>
+				Some text<br> Some text<br> Some text<br> Some text<br>
 				Some text<br> Some text<br> Some text<br> Some text<br>
 				Some text<br> Some text<br></td>
 		</tr>
