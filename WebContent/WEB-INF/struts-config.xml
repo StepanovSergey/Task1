@@ -11,21 +11,18 @@
 	</form-beans>
 
 	<action-mappings>
-		<action path="/index" forward="index.page" />
-		<action path="/registration" name="newsForm" input="index.page"
-			forward="congratulation.page" /
-	
+		<action path="/index" type="com.epam.news.actions.NewsAction"
+			name="newsForm" scope="request" validate="false" input="/index.jsp">
+			<forward name="failure" path="/index.jsp" />
+			<forward name="success" path="/displayname.jsp" />
+		</action>
 	</action-mappings>
 
-	<!-- Internationalization -->
-	<message-resources parameter="com/epam/news/resources/ApplicationResource"
-		null="false" />
+	<!-- Internationalization <message-resources parameter="com/epam/news/resources/ApplicationResource" 
+		null="false" /> -->
 
-	<!-- Struts tiles configuration -->
-	<plug-in className="org.apache.struts.tiles.TilesPlugin">
-		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
-	</plug-in>
-
-
+	<!-- Struts tiles configuration <plug-in className="org.apache.struts.tiles.TilesPlugin"> 
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" 
+		/> </plug-in> -->
 	<!-- -->
 </struts-config>
