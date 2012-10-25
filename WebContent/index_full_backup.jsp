@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <html>
 <head>
@@ -40,8 +39,20 @@
 			</td>
 			<!-- Content -->
 			<td class="content">
-Welcoma boss!
-			</td>
+			<html:form action="/index">
+					<table>
+						<tr>
+							<td>Name:</td>
+							<td><html:text property="name" /></td>
+						</tr>
+						<tr>
+							<td><html:submit /></td>
+						</tr>
+					</table>
+				</html:form>
+				Some text<br> Some text<br> Some text<br> Some text<br>
+				Some text<br> Some text<br> Some text<br> Some text<br>
+				Some text<br> Some text<br></td>
 		</tr>
 
 	</table>

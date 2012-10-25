@@ -1,5 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<h1>
-	<bean:message key="welcome.title" />
-</h1>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<table class="header">
+	<tr>
+		<td rowspan="2" class="header_title"><span>News management</span></td>
+	</tr>
+	<tr>
+		<td class="header_languages"><a href="#">English</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+			href="#">Russian</a></td>
+	</tr>
+</table>

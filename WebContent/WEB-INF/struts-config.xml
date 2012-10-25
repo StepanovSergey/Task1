@@ -10,19 +10,38 @@
 		<form-bean name="newsForm" type="com.epam.news.forms.NewsForm" />
 	</form-beans>
 
+
+	<global-forwards>
+		<forward name="main_page" path="/viewname"></forward>
+	</global-forwards>
+
 	<action-mappings>
-		<action path="/index" type="com.epam.news.actions.NewsAction"
-			name="newsForm" scope="request" validate="false" input="/index.jsp">
-			<forward name="failure" path="/index.jsp" />
-			<forward name="success" path="/displayname.jsp" />
+		<action path="/viewname" type="com.epam.news.actions.NewsAction"
+			name="newsForm" scope="request" validate="false" input="index.jsp">
+			<forward name="failure" path="mainPage.page" />
+			<forward name="success" path="displayname.page" />
 		</action>
+		<action path="/addEditNews" type="com.epam.news.actions.NewsAction"
+			name="newsForm" scope="request" validate="false" input="index.jsp">
+			<forward name="failure" path="mainPage.page" />
+			<forward name="success" path="displayname.page" />
+		</action>
+		
+		
+		<action path="/index" forward="mainPage.page"></action>
 	</action-mappings>
 
-	<!-- Internationalization <message-resources parameter="com/epam/news/resources/ApplicationResource" 
-		null="false" /> -->
-
-	<!-- Struts tiles configuration <plug-in className="org.apache.struts.tiles.TilesPlugin"> 
-		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" 
-		/> </plug-in> -->
-	<!-- -->
+	<!-- Internationalization -->
+	<message-resources parameter="com/epam/news/resources/ApplicationResource"
+		null="false" />
+		
+	<!-- Struts tiles configuration -->
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
+		<set-property property="definitions-debug" value="2" />
+		<set-property property="definitions-parser-details"
+			value="2" />
+		<set-property property="definitions-parser-validate"
+			value="true" />
+	</plug-in>
 </struts-config>

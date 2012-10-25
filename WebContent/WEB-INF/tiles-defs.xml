@@ -3,14 +3,29 @@
 <!DOCTYPE tiles-definitions PUBLIC
   "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
   "http://struts.apache.org/dtds/tiles-config_1_1.dtd">
-<!-- 
+
 <tiles-definitions>
-	<definition name="index.page" path="/jsp/layout.jsp">
+	<definition name="layout" path="/jsp/layouts/layout.jsp">
+		<put name="title" value="default page" />
 		<put name="header" value="/jsp/tiles/header.jsp" />
-		<put name="body" value="/jsp/tiles/registration.jsp" />
+		<put name="menu" value="/jsp/tiles/menu.jsp" />
+		<put name="content" value="" />
+		<put name="footer" value="/jsp/tiles/footer.jsp"></put>
 	</definition>
-	<definition name="congratulation.page" extends="index.page">
-		<put name="body" value="jsp/tiles/congratulation.jsp" />
+
+	<definition name="mainPage.page" extends="layout">
+		<put name="title" value="MAIN INDEX PAGE!"></put>
+		<put name="content" value="/jsp/main_page.jsp"></put>
 	</definition>
+
+	<definition name="displayname.page" extends="layout">
+		<put name="title" value="Display Name!"></put>
+		<put name="content" value="/jsp/displayname.jsp"></put>
+	</definition>
+	
+	<definition name="">
+		<put name="title" value="all news" />
+		<put name="content" value="/jsp/tiles/allNewsBody.jsp" />
+	</definition>
+
 </tiles-definitions>
- -->
