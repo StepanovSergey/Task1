@@ -18,6 +18,10 @@ import com.epam.news.bean.News;
  * @author Siarhei_Stsiapanau
  * 
  */
+/**
+ * @author Siarhei_Stsiapanau
+ * 
+ */
 public class DAOImpl implements DAO {
     private static final Logger log = Logger.getLogger(DAOImpl.class);
     private Connection connection;
@@ -44,7 +48,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, resultSet);
+	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return allNews;
@@ -64,7 +68,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, resultSet);
+	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return news;
@@ -83,7 +87,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, resultSet);
+	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
     }
@@ -102,7 +106,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, resultSet);
+	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
     }
@@ -113,15 +117,23 @@ public class DAOImpl implements DAO {
 	try {
 	    statement = connection.createStatement();
 	    String deleteManyNewsQuery = createDeleteManyNewsQuery(ids);
+	    System.out.println("Delete news query = " + deleteManyNewsQuery);
 	    statement.executeUpdate(deleteManyNewsQuery);
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, resultSet);
+	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
     }
 
+    /**
+     * Create query for deleting many news by one query
+     * 
+     * @param ids
+     *            ids of news for deleting
+     * @return string query for deleting many news
+     */
     private String createDeleteManyNewsQuery(Integer[] ids) {
 	StringBuffer query = new StringBuffer(deleteManyNewsQuery);
 	Integer lastId = ids[ids.length - 1];
@@ -136,6 +148,13 @@ public class DAOImpl implements DAO {
 	return query.toString();
     }
 
+    /**
+     * Creates new news entity with parameters in result set
+     * 
+     * @param resultSet
+     *            set of parameters from database
+     * @return news entity with parameters
+     */
     private News setParameters(ResultSet resultSet) {
 	News news = new News();
 	try {
@@ -150,7 +169,18 @@ public class DAOImpl implements DAO {
 	return news;
     }
 
-    private void releaseResources(Statement statement, ResultSet resultSet) {
+    /**
+     * Close result set, statement and prepared statement
+     * 
+     * @param statement
+     *            statement to close
+     * @param preparedStatement
+     *            prepared statement to close
+     * @param resultSet
+     *            result set to close
+     */
+    private void releaseResources(Statement statement,
+	    PreparedStatement preparedStatement, ResultSet resultSet) {
 	if (statement != null) {
 	    try {
 		statement.close();
@@ -161,6 +191,13 @@ public class DAOImpl implements DAO {
 	if (resultSet != null) {
 	    try {
 		resultSet.close();
+	    } catch (SQLException e) {
+		log.error(e.getMessage(), e);
+	    }
+	}
+	if (preparedStatement != null) {
+	    try {
+		preparedStatement.close();
 	    } catch (SQLException e) {
 		log.error(e.getMessage(), e);
 	    }

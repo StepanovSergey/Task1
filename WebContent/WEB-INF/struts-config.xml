@@ -27,7 +27,6 @@
 			<forward name="success" path="displayname.page" />
 		</action>
 		
-		
 		<action path="/index" forward="mainPage.page"></action>
 	</action-mappings>
 

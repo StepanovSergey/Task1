@@ -40,7 +40,7 @@
 			</td>
 			<!-- Content -->
 			<td class="content">
-Welcoma boss!
+Welcoma boss! <bean:message key="news.edit"/>
 			</td>
 		</tr>
 

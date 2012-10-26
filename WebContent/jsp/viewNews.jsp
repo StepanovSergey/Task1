@@ -2,12 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@taglib uri="/WEB-INF/struts-nested.tld" prefix="nested" %>
 
 <html>
 <head>
-<title><nested:message key="news.view.title" /></title>
+<title><bean:message key="news.view.title" /></title>
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
@@ -41,30 +39,36 @@
 					</div>
 				</td>
 				<!-- Content -->
-				<td class="content">News &gt;&gt; <nested:message
-						key="view.news.title" /> <br> 
-						<table>
-							<tr>
-								<td><bean:message key='news.title' /></td>
-								<td>111</td>
-							</tr>
-							<tr>
-								<td><nested:message key="news.date" /></td>
-								<td>222</td>
-							</tr>
-							<tr>
-								<td><nested:message key="news.brief" /></td>
-								<td>333</td>
-							</tr>
-							<tr>
-								<td><nested:message key="news.content" /></td>
-								<td>444</td>
-							</tr>
-							<tr>
-						
-							</tr>
-						</table>
-
+				<td class="content">News &gt;&gt; <bean:message
+						key="news.view.title" /> <br>
+					<table>
+						<tr>
+							<td><bean:message key='news.title' /></td>
+							<td>111</td>
+						</tr>
+						<tr>
+							<td><bean:message key="news.date" /></td>
+							<td>222</td>
+						</tr>
+						<tr>
+							<td><bean:message key="news.brief" /></td>
+							<td>333</td>
+						</tr>
+						<tr>
+							<td><bean:message key="news.content" /></td>
+							<td>444</td>
+						</tr>
+						<tr><td>
+							<form action="/viewedNews" method="POST">
+								<html:submit property="edit">
+									<bean:message key="news.edit" />
+								</html:submit>
+								<html:submit property="delete">
+									<bean:message key="news.delete" />
+								</html:submit>
+							</form></td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 
