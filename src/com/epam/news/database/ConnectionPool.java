@@ -10,6 +10,8 @@ import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 
+import com.epam.news.utils.DataBaseParameters;
+
 /**
  * This class provides connection pool
  * 
@@ -18,15 +20,12 @@ import org.apache.log4j.Logger;
  */
 public class ConnectionPool {
     private static final Logger log = Logger.getLogger(ConnectionPool.class);
-    private static final String driverClass = "oracle.jdbc.driver.OracleDriver";
-    private static final String URI = "jdbc:oracle:thin:@localhost:1521:XE";
-    private static final String user = "SYSTEM";
-    private static final String password = "root";
-    private static final int poolSize = 5;
+    private static DataBaseParameters dbParameters;
     private static ConnectionPool instance = new ConnectionPool();
     private static Queue<Connection> occupiedConnections = new ConcurrentLinkedQueue<Connection>();
     private static Queue<Connection> freeConnections = new ConcurrentLinkedQueue<Connection>();
-    private static Semaphore semaphore = new Semaphore(poolSize, true);
+    private static Semaphore semaphore = new Semaphore(
+	    dbParameters.getPoolSize(), true);
 
     private ConnectionPool() {
     }
@@ -36,8 +35,8 @@ public class ConnectionPool {
      */
     public static void init() {
 	try {
-	    Class.forName(driverClass);
-	    for (int i = 0; i < poolSize; i++) {
+	    Class.forName(dbParameters.getDriverClass());
+	    for (int i = 0; i < dbParameters.getPoolSize(); i++) {
 		Connection connection = openConnection();
 		freeConnections.add(connection);
 	    }
@@ -76,7 +75,8 @@ public class ConnectionPool {
     private static Connection openConnection() {
 	Connection connection = null;
 	try {
-	    connection = DriverManager.getConnection(URI, user, password);
+	    connection = DriverManager.getConnection(dbParameters.getURI(),
+		    dbParameters.getUser(), dbParameters.getPassword());
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	}

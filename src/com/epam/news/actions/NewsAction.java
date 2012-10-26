@@ -11,9 +11,29 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.epam.news.database.DAO;
 import com.epam.news.forms.NewsForm;
 
 public class NewsAction extends Action {
+    private DAO dao;
+
+    /**
+     * Get DAO
+     * @return the dao
+     */
+    public DAO getDao() {
+	return dao;
+    }
+
+    /**
+     * Set DAO
+     * @param dao
+     *            the dao to set
+     */
+    public void setDao(DAO dao) {
+	this.dao = dao;
+    }
+
     public ActionForward execute(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {

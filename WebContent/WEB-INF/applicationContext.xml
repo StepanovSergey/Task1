@@ -1,42 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-    <!-- Connection pool -->
-    <bean id="connectionPool" class="com.epam.news.database.ConnectionPool"
-          init-method="init" destroy-method="closeAllConnections">
-    </bean>
-   
-    <!-- DAOOracle -->
-    <bean id="newsDAOOracle" class="com.epam.news.database.NewsDAOOracle">
-        <property name="resourceReleaser">
-            <ref bean="releaser"/>
-        </property>
-        <property name="connectionPool">
-            <ref bean="connectionPool"/> 
-        </property>
-    </bean>
-    
-    <!-- Actions -->
-    <bean name="/NewsList, 
-                               /ViewNews, 
-                               /EditNews,
-                               /DeleteNews, 
-                               /DeleteNewsGroup,  
-                               /AddNews, 
-                               /Save, 
-                               /Cancel,
-                               /ChangeLanguage" 
-          id="newsAction"
-          class="com.epam.news.action.NewsAction">
-        <property name="newsDAO">
-            <ref bean="newsDAOOracle"/>
-        </property>
-    </bean>
+	<!-- Connection pool -->
+	<bean id="connectionPool" class="com.epam.news.database.ConnectionPool"
+		init-method="init" destroy-method="closeAllConnections">
+	</bean>
+
+	<!-- Database parameters -->
+	<bean id="dataBaseParameters" class="com.epam.news.util.DataBaseParameters">
+		<property name="URI" value="jdbc:oracle:thin:@localhost:1521:XE" />
+		<property name="driverClass" value="oracle.jdbc.OracleDriver" />
+		<property name="user" value="SYSTEM" />
+		<property name="password" value="root" />
+		<property name="poolSize" value="5" />
+	</bean>
+
+	<!-- Actions -->
+	<bean
+		name="/NewsList, /ViewNews, /EditNews, /DeleteNews, /DeleteNewsGroup, /AddNews, /Save, /Cancel, /ChangeLanguage"
+		id="newsAction" class="com.epam.news.action.NewsAction">
+		<property name="dao">
+			<ref bean="DAO" />
+		</property>
+	</bean>
 </beans>
