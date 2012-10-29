@@ -21,19 +21,15 @@ import com.epam.news.utils.DataBaseParameters;
 public class ConnectionPool {
     private static final Logger log = Logger.getLogger(ConnectionPool.class);
     private static DataBaseParameters dbParameters;
-    private static ConnectionPool instance = new ConnectionPool();
     private static Queue<Connection> occupiedConnections = new ConcurrentLinkedQueue<Connection>();
     private static Queue<Connection> freeConnections = new ConcurrentLinkedQueue<Connection>();
-    private static Semaphore semaphore = new Semaphore(
-	    dbParameters.getPoolSize(), true);
-
-    private ConnectionPool() {
-    }
+    private static Semaphore semaphore;
 
     /**
      * Initialize connection pool
      */
     public static void init() {
+	semaphore = new Semaphore(dbParameters.getPoolSize(), true);
 	try {
 	    Class.forName(dbParameters.getDriverClass());
 	    for (int i = 0; i < dbParameters.getPoolSize(); i++) {
@@ -43,6 +39,20 @@ public class ConnectionPool {
 	} catch (ClassNotFoundException e) {
 	    log.error(e.getMessage(), e);
 	}
+    }
+
+    /**
+     * @return the dbParameters
+     */
+    public static DataBaseParameters getDbParameters() {
+        return dbParameters;
+    }
+
+    /**
+     * @param dbParameters the dbParameters to set
+     */
+    public static void setDbParameters(DataBaseParameters dbParameters) {
+        ConnectionPool.dbParameters = dbParameters;
     }
 
     /**
@@ -61,15 +71,6 @@ public class ConnectionPool {
 	    log.error(e.getMessage(), e);
 	}
 	return connection;
-    }
-
-    /**
-     * Get instance of connection pool
-     * 
-     * @return connection pool instance
-     */
-    public static ConnectionPool getInstance() {
-	return instance;
     }
 
     private static Connection openConnection() {

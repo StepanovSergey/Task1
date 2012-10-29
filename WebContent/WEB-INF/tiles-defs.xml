@@ -18,14 +18,9 @@
 		<put name="content" value="/jsp/main_page.jsp"></put>
 	</definition>
 
-	<definition name="displayname.page" extends="layout">
-		<put name="title" value="Display Name!"></put>
-		<put name="content" value="/jsp/displayname.jsp"></put>
+	<definition name="newsList.page" extends="layout">
+		<put name="title" value="News List!"></put>
+		<put name="content" value="/jsp/tiles/newsListBody.jsp"></put>
 	</definition>
 	
-	<definition name="">
-		<put name="title" value="all news" />
-		<put name="content" value="/jsp/tiles/allNewsBody.jsp" />
-	</definition>
-
 </tiles-definitions>

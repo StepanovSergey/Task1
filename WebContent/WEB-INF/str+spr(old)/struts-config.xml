@@ -15,8 +15,10 @@
 	</global-forwards>
 
 	<action-mappings>
-		<action path="/viewname" type="com.epam.news.actions.NewsAction" name="newsForm" input="/index.jsp" validate="false">
-			<forward name="newsList" path="newsList.page" />
+		<action path="/NewsList" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="viewNewsList" input="newsList" validate="false">
+			<forward name="newsList12" path="index123.jps" />
 			<forward name="error" path="/jsp/error.jsp" />
 		</action>
 

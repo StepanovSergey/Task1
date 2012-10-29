@@ -31,8 +31,8 @@
 					<p class="menu_title">News</p>
 					<div class="menu_ul">
 						<ul>
-							<li><a href="NewsList.do">News List</a></li>
-							<li><a href="AddNews.do">Add News</a></li>
+							<li><a href="/NewsList">News List</a></li>
+							<li><a href="/AddNews">Add News</a></li>
 						</ul>
 					</div>
 					<br>
@@ -40,10 +40,7 @@
 			</td>
 			<!-- Content -->
 			<td class="content">
-				<html:form action="/viewname">
-					<html:text property="name" />
-					<html:submit />
-				</html:form>
+Ошибко нашальникэ! <bean:message key="news.edit"/>
 			</td>
 		</tr>
 

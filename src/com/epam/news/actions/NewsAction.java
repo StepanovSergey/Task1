@@ -19,6 +19,7 @@ public class NewsAction extends Action {
 
     /**
      * Get DAO
+     * 
      * @return the dao
      */
     public DAO getDao() {
@@ -27,6 +28,7 @@ public class NewsAction extends Action {
 
     /**
      * Set DAO
+     * 
      * @param dao
      *            the dao to set
      */
@@ -34,10 +36,19 @@ public class NewsAction extends Action {
 	this.dao = dao;
     }
 
+    /*
+     * public ActionForward viewNewsList(ActionMapping mapping, ActionForm form,
+     * HttpServletRequest request, HttpServletResponse response) throws
+     * Exception { String target = "ERROR"; NewsForm newsForm = (NewsForm) form;
+     * ArrayList<News> newsList = (ArrayList<News>) dao.getAll(); if (newsList
+     * != null) { target = "newsList"; newsForm.setNewsList(newsList); } return
+     * mapping.findForward("newsList"); }
+     */
+
     public ActionForward execute(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {
-	String target = new String("success");
+	String target = new String("newsList");
 	String name = null;
 	if (form != null) {
 	    // Use the NameForm to get the request parameters
@@ -46,7 +57,7 @@ public class NewsAction extends Action {
 	}
 	// if no mane supplied Set the target to failure
 	if (name == null) {
-	    target = new String("failure");
+	    target = new String("error");
 	} else {
 	    request.setAttribute("NAME", name);
 	}

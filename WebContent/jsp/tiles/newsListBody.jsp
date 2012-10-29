@@ -4,5 +4,5 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 
 <td class="content">
-	This is list of all news.
+	Hello <%= request.getAttribute("NAME") %> !!
 </td>
