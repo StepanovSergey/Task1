@@ -32,7 +32,7 @@
 }
 
 .menu_content_table{
-	width: 100%\9;
+	width: 100%;
 }
 
 .menu_div {
@@ -71,4 +71,20 @@
 
 .footer {
 	text-align: center;
+}
+
+.newsListTable{
+	width: 95%;
+	margin-bottom: 5px;
+}
+.newsListTableTitle{
+	width: 90%;
+}
+.newsListTableButtons{
+	text-align: right;
+	padding-right: 15px;
+}
+.newsListTableDeleteButton{
+	text-align: right;
+	padding-right: 15px;
 }

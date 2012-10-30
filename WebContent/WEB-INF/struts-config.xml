@@ -8,25 +8,39 @@
 
 	<form-beans>
 		<form-bean name="newsForm" type="com.epam.news.forms.NewsForm" />
+		<form-bean name="newsListForm" type="com.epam.news.forms.NewsListForm" />
 	</form-beans>
-
-	<global-forwards>
-		<forward name="main_page" path="/viewname"></forward>
-	</global-forwards>
-
+	
+	<!-- Actions -->
 	<action-mappings>
+		
+		<action path="/mainPageindex" forward="newsList.page" />
+				
+		<action path="/NewsList" type="com.epam.news.actions.NewsListAction" name="newsListForm" validate="false">
+			<forward name="success" path="newsList.page" />
+			<forward name="failure" path="error.page" />
+		</action>
+		
+		<action path="/ViewNews" type="com.epam.news.actions.NewsListAction" name="newsListForm" input="/index.jsp" validate="false">
+			<forward name="success" path="newsList.page" />
+			<forward name="failure" path="error.page" />
+		</action>
+		
+		<action path="/EditNews" type="com.epam.news.actions.NewsListAction" name="newsListForm" input="/index.jsp" validate="false">
+			<forward name="success" path="newsList.page" />
+			<forward name="failure" path="error.page" />
+		</action>
+		
+		<action path="/DeleteNews" type="com.epam.news.actions.NewsListAction" name="newsListForm" input="/index.jsp" validate="false">
+			<forward name="success" path="newsList.page" />
+			<forward name="failure" path="error.page" />
+		</action>
+		
 		<action path="/viewname" type="com.epam.news.actions.NewsAction" name="newsForm" input="/index.jsp" validate="false">
 			<forward name="newsList" path="newsList.page" />
-			<forward name="error" path="/jsp/error.jsp" />
+			<forward name="error" path="error.page" />
 		</action>
 
-		<action path="/addEditNews" type="com.epam.news.actions.NewsAction"
-			name="newsForm" scope="request" validate="false" input="index.jsp">
-			<forward name="failure" path="mainPage.page" />
-			<forward name="success" path="displayname.page" />
-		</action>
-
-		<action path="/index" forward="mainPage.page"></action>
 	</action-mappings>
 
 	<!-- Tiles processor -->

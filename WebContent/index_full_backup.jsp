@@ -21,41 +21,34 @@
 	</table>
 	<!-- Menu and content -->
 	<div class="menu_content">
-	<table class="menu_content_table">
-		<!-- Menu -->
-		<tr>
-			<td class="menu">
-				<div class="menu_div">
-					<br>
-					<p class="menu_title">News</p>
-					<div class="menu_ul">
-						<ul>
-							<li><a href="#">News List</a></li>
-							<li><a href="#">Add News</a></li>
-						</ul>
+		<table class="menu_content_table">
+			<!-- Menu -->
+			<tr>
+				<td class="menu">
+					<div class="menu_div">
+						<br>
+						<p class="menu_title">News</p>
+						<div class="menu_ul">
+							<ul>
+								<li><a href="#">News List</a></li>
+								<li><a href="#">Add News</a></li>
+							</ul>
+						</div>
+						<br>
 					</div>
-					<br>
-				</div>
-			</td>
-			<!-- Content -->
-			<td class="content">
-			<html:form action="/index">
-					<table>
-						<tr>
-							<td>Name:</td>
-							<td><html:text property="name" /></td>
-						</tr>
-						<tr>
-							<td><html:submit /></td>
-						</tr>
-					</table>
-				</html:form>
-				Some text<br> Some text<br> Some text<br> Some text<br>
-				Some text<br> Some text<br> Some text<br> Some text<br>
-				Some text<br> Some text<br></td>
-		</tr>
+				</td>
+				<!-- Content -->
+				<td class="content"><html:form action="/viewname">
+						<html:text property="name" />
+						<html:submit />
+					</html:form> <br> <html:form action="/NewsList">
+						<html:submit />
+					</html:form> Some text<br> Some text<br> Some text<br> Some text<br>
+					Some text<br> Some text<br> Some text<br> Some text<br>
+					Some text<br> Some text<br></td>
+			</tr>
 
-	</table>
+		</table>
 	</div>
 	<!-- Footer -->
 	<table class="footer">

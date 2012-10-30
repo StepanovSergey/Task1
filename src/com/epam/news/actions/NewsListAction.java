@@ -26,11 +26,12 @@ public class NewsListAction extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws IOException, ServletException {
-	String target = "failed";
+	String target = "failure";
 	DAOImpl dao = new DAOImpl();
 	List<News> list = dao.getAll();
 	if (list != null) {
 	    request.getSession().setAttribute("newsList", list);
+	    target = "success";
 	}
 	return (mapping.findForward(target));
     }
