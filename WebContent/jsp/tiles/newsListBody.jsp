@@ -5,31 +5,36 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<td class="content">News &gt;&gt; News List <br> <%-- <html:form action="/DeleteNews">
-		<c:forEach items="${newsList}" var="news">
-			<table class="newsListTable" border=1>
-				<tr>
-					<td class='newsListTableTitle'>News Title <c:out
-							value="${news.title }" />
-					</td>
-					<td><c:out value="${news.date }" /></td>
-				</tr>
-				<tr>
-					<td><c:out value="${news.brief }" /></td>
-				</tr>
-				<tr>
-					<td class='newsListTableButtons' colspan="2"><html:link
-							forward="ViewNews.do">
-							<bean:message key="news.list.view"></bean:message>
-						</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:link forward="EditNews.do">
-							<bean:message key="news.list.edit"></bean:message>
-						</html:link> &nbsp;&nbsp;&nbsp;&nbsp; box</td>
-				</tr>
-			</table>
-		</c:forEach>
+<span class="contentNewsTitle"><bean:message key="news.news" /></span> &gt;&gt; <bean:message key="menu.news.list" />
+<br><br>
+<html:form action="/DeleteNews">
+	<c:forEach items="${newsList}" var="news">
 		<table class="newsListTable">
 			<tr>
-				<td class="newsListTableDeleteButton"></td>
+				<td class='newsListTableTitle'><bean:message key="news.title" /> ${news.title }
+				</td>
+				<td>${news.date }</td>
+			</tr>
+			<tr>
+				<td>${news.brief }</td>
+			</tr>
+			<tr>
+				<td class='newsListTableButtons' colspan="2"><html:link
+						action="ViewNews">
+						<bean:message key="news.list.view"></bean:message>
+					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:link action="EditNews">
+						<bean:message key="news.list.edit"></bean:message>
+					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:multibox property="selectedItems"
+						value="${news.id }"></html:multibox></td>
 			</tr>
 		</table>
-	</html:form> --%></td>
+	</c:forEach>
+	<table class="newsListTable">
+		<tr>
+			<td class="newsListTableDeleteButton"><html:submit>
+					<bean:message key="news.delete" />
+				</html:submit></td>
+		</tr>
+	</table>
+</html:form>
+<br>

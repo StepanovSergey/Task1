@@ -3,7 +3,6 @@ package com.epam.news.forms;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 
 import com.epam.news.bean.News;

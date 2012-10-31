@@ -10,17 +10,36 @@
 </head>
 <body>
 	<!-- Header -->
-	<tiles:insert attribute="header" />
+	<table class="header">
+		<tr>
+			<td rowspan="2" class="header_title"><tiles:insert
+					attribute="headerTitle" /></td>
+		</tr>
+		<tr>
+			<td class="header_languages"><tiles:insert
+					attribute="headerLang" /></td>
+		</tr>
+	</table>
 	<!-- Menu and content -->
 	<table class="menu_content">
 		<!-- Menu -->
 		<tr>
-			<tiles:insert attribute="menu" />
+			<td class="menu">
+				<div class="menu_div">
+					<br>
+					<tiles:insert attribute="menu" />
+					<br>
+				</div>
+			</td>
 			<!-- Content -->
-			<tiles:insert attribute="content" />
+			<td class="content"><tiles:insert attribute="content" /></td>
 		</tr>
 	</table>
 	<!-- Footer -->
-	<tiles:insert attribute="footer" />
+	<table class="footer">
+		<tr>
+			<td><tiles:insert attribute="footer" /></td>
+		</tr>
+	</table>
 </body>
 </html>

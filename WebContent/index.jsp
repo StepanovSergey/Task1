@@ -2,4 +2,4 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 
-<logic:redirect name="/mainPageindex" />
+<logic:redirect forward="NewsList" />
