@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 
 import com.epam.news.bean.News;
 import com.epam.news.database.DAOImpl;
+import com.epam.news.forms.NewsListForm;
 
 /**
  * @author Siarhei_Stsiapanau
@@ -30,7 +31,8 @@ public class NewsListAction extends Action {
 	DAOImpl dao = new DAOImpl();
 	List<News> list = dao.getAll();
 	if (list != null) {
-	    request.getSession().setAttribute("newsList", list);
+	    NewsListForm listForm = (NewsListForm) form;
+	    listForm.setNewsList(list);
 	    target = "success";
 	}
 	return (mapping.findForward(target));

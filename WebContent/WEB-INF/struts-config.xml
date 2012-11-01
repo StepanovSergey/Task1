@@ -5,21 +5,24 @@
         "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
 
 <struts-config>
-
+	<!-- Forms -->
 	<form-beans>
 		<form-bean name="newsForm" type="com.epam.news.forms.NewsForm" />
 		<form-bean name="newsListForm" type="com.epam.news.forms.NewsListForm" />
 		<form-bean name="changeLocaleForm" type="com.epam.news.forms.ChangeLocaleForm" />
 		<form-bean name="deleteNewsForm" type="com.epam.news.forms.DeleteNewsForm" />
 	</form-beans>
+	
+	<!-- Global forwards -->
 	<global-forwards>
 		<forward name="NewsList" path="/NewsList.do"></forward>
 	</global-forwards>
+	
 	<!-- Actions -->
 	<action-mappings>
 
 		<action path="/NewsList" type="com.epam.news.actions.NewsListAction"
-			name="newsListForm" validate="false">
+			name="newsListForm" validate="false" scope="session">
 			<forward name="success" path="newsList.page" />
 			<forward name="failure" path="error.page" />
 		</action>
