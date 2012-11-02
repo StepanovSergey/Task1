@@ -5,7 +5,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
 <span class="contentNewsTitle"><bean:message key="news.news" /></span>
-&gt;&gt; 
+&gt;&gt;
 <bean:message key="menu.news.list" />
 <br>
 <br>
@@ -27,8 +27,9 @@
 				<td><bean:write name="news" property="brief" /></td>
 			</tr>
 			<tr>
-				<td class='newsListTableButtons' colspan="2"><html:link
-						action="ViewNews">
+				<bean:define name="news" id="newsId" property="id" />
+				<td class='newsListTableLinks' colspan="2"><html:link
+						action="ViewNews" paramName="newsId" paramId="id">
 						<bean:message key="news.list.view"></bean:message>
 					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:link action="EditNews">
 						<bean:message key="news.list.edit"></bean:message>
@@ -40,7 +41,7 @@
 	</logic:iterate>
 	<table class="newsListTable">
 		<tr>
-			<td class="newsListTableDeleteButton"><html:submit>
+			<td class="afterTableButtons"><html:submit>
 					<bean:message key="news.delete" />
 				</html:submit></td>
 		</tr>
