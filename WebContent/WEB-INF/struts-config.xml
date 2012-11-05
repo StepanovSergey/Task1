@@ -16,60 +16,68 @@
 		<form-bean name="saveNewsForm" type="com.epam.news.forms.SaveNewsForm" />
 		<form-bean name="cancelForm" type="com.epam.news.forms.CancelForm" />
 	</form-beans>
-	
+
 	<!-- Global forwards -->
 	<global-forwards>
 		<forward name="NewsList" path="/NewsList.do" />
 		<forward name="Cancel" path="newsList.page" />
 	</global-forwards>
-	
+
 	<!-- Actions -->
 	<action-mappings>
 
-		<action path="/NewsList" type="com.epam.news.actions.NewsListAction"
-			name="newsListForm" validate="false" scope="session">
+		<action path="/NewsList" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="viewNewsList" validate="false">
 			<forward name="success" path="newsList.page" />
 			<forward name="failure" path="error.page" />
 		</action>
 
-		<action path="/ChangeLocale" type="com.epam.news.actions.ChangeLocaleAction"
-			name="changeLocaleForm" validate="false">
+		<action path="/ChangeLocale" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="changeLocale" validate="false">
 			<forward name="success" path="newsList.page" />
 			<forward name="failure" path="error.page" />
 		</action>
 
-		<action path="/ViewNews" type="com.epam.news.actions.ViewNewsAction"
-			name="viewNewsForm" validate="false" scope="session">
+		<action path="/ViewNews" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="viewNews" validate="false" scope="session">
 			<forward name="success" path="viewNews.page" />
 			<forward name="failure" path="error.page" />
 		</action>
 
-		<action path="/EditNews" type="com.epam.news.actions.EditNewsAction"
-			name="editNewsForm" validate="false">
+		<action path="/EditNews" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="viewNews" validate="false">
 			<forward name="success" path="addNews.page" />
 			<forward name="failure" path="error.page" />
 		</action>
-		
-		<action path="/DeleteNews" type="com.epam.news.actions.DeleteNewsAction"
-			name="deleteNewsForm" validate="false">
+
+		<action path="/DeleteNews" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="deleteNews" validate="false">
 			<forward name="success" path="newsList.page" />
 			<forward name="failure" path="error.page" />
 		</action>
-		
-		<action path="/AddNews" type="com.epam.news.actions.EditNewsAction"
-			name="editNewsForm" validate="false">
+
+		<action path="/AddNews" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="addNews" validate="false">
 			<forward name="success" path="addNews.page" />
 			<forward name="failure" path="error.page" />
 		</action>
-		
-		<action path="/SaveNews" type="com.epam.news.actions.SaveNewsAction"
-			name="saveNewsForm" validate="false">
+
+		<action path="/SaveNews" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="save" validate="false">
 			<forward name="success" path="newsList.page" />
 			<forward name="failure" path="error.page" />
 		</action>
-		
-		<action path="/Cancel" type="com.epam.news.actions.CancelAction"
-			name="cancelForm" validate="false">
+
+		<action path="/Cancel" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="cancel" validate="false">
 			<forward name="success" path="newsList.page" />
 		</action>
 
@@ -86,7 +94,8 @@
 	<plug-in className="org.apache.struts.tiles.TilesPlugin">
 		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
 	</plug-in>
-	<!-- <plug-in className="org.springframework.web.struts.ContextLoaderPlugIn"> 
-		<set-property property="contextConfigLocation" value="/WEB-INF/applicationContext.xml" 
-		/> </plug-in> -->
+	<!-- Spring integration -->
+	<plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
+		<set-property property="contextConfigLocation" value="/WEB-INF/applicationContext.xml" />
+	</plug-in>
 </struts-config>

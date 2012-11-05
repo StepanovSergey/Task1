@@ -3,12 +3,14 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 
+
 <span class="contentNewsTitle"><bean:message key="news.news" /></span>
 &gt;&gt;
 <bean:message key="news.add.title" />
 <br>
 <br>
-<bean:define name="editNewsForm" property="news" id="news" />
+
+<bean:define name="newsForm" property="news" id="news" />
 <html:form action="/SaveNews">
 <table>
 	<tr>

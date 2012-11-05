@@ -10,12 +10,12 @@
 <br>
 <br>
 <html:form action="/DeleteNews">
-	<logic:empty name="newsListForm" property="newsList">
+	<logic:empty name="newsForm" property="newsList">
 
 		<bean:message key="news.noNews" />
 
 	</logic:empty>
-	<logic:iterate id="news" property="newsList" name="newsListForm">
+	<logic:iterate id="news" property="newsList" name="newsForm">
 		<table class="newsListTable">
 			<tr>
 				<td class='newsListTableTitle'><bean:write name="news"

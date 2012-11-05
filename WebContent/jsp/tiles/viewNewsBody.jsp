@@ -9,7 +9,7 @@
 <bean:message key="news.view.title" />
 <br>
 <br>
-<bean:define name="viewNewsForm" property="news" id="news" />
+<bean:define name="newsForm" property="news" id="news" />
 <table>
 	<tr>
 		<td class="newsTableTitles"><bean:message key='news.title' /></td>
