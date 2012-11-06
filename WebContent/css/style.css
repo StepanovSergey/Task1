@@ -70,6 +70,9 @@ body{
 	padding-bottom: 20px;
 	list-style-type: disc;
 }
+.menu_ul li{
+	padding-top: 5px;
+}
 
 .content {
 	border: 1px solid silver;

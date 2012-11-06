@@ -31,7 +31,8 @@
 				<td class='newsListTableLinks' colspan="2"><html:link
 						action="ViewNews" paramName="newsId" paramId="id">
 						<bean:message key="news.list.view"></bean:message>
-					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:link action="EditNews">
+					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:link action="EditNews"
+						paramName="newsId" paramId="id">
 						<bean:message key="news.list.edit"></bean:message>
 					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:multibox property="selectedItems">
 						<bean:write name='news' property='id' />

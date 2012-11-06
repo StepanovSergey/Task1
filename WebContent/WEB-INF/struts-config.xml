@@ -19,8 +19,12 @@
 
 	<!-- Global forwards -->
 	<global-forwards>
-		<forward name="NewsList" path="/NewsList.do" />
-		<forward name="Cancel" path="newsList.page" />
+		<forward name="mainPage" path="/NewsList.do" />
+		<forward name="newsList" path="newsList.page" />
+		<forward name="viewNews" path="viewNews.page" />
+		<forward name="addNews" path="addNews.page" />
+		<forward name="editNews" path="addNews.page" />
+		<forward name="error" path="error.page" />
 	</global-forwards>
 
 	<!-- Actions -->
@@ -29,56 +33,41 @@
 		<action path="/NewsList" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="viewNewsList" validate="false">
-			<forward name="success" path="newsList.page" />
-			<forward name="failure" path="error.page" />
 		</action>
 
 		<action path="/ChangeLocale" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="changeLocale" validate="false">
-			<forward name="success" path="newsList.page" />
-			<forward name="failure" path="error.page" />
 		</action>
 
 		<action path="/ViewNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="viewNews" validate="false" scope="session">
-			<forward name="success" path="viewNews.page" />
-			<forward name="failure" path="error.page" />
 		</action>
 
 		<action path="/EditNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="viewNews" validate="false">
-			<forward name="success" path="addNews.page" />
-			<forward name="failure" path="error.page" />
+			parameter="editNews" validate="false">
 		</action>
 
 		<action path="/DeleteNews" name="newsForm"
-			type="org.springframework.web.struts.DelegatingActionProxy"
+		type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="deleteNews" validate="false">
-			<forward name="success" path="newsList.page" />
-			<forward name="failure" path="error.page" />
 		</action>
 
 		<action path="/AddNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="addNews" validate="false">
-			<forward name="success" path="addNews.page" />
-			<forward name="failure" path="error.page" />
 		</action>
 
 		<action path="/SaveNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="save" validate="false">
-			<forward name="success" path="newsList.page" />
-			<forward name="failure" path="error.page" />
 		</action>
 
 		<action path="/Cancel" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="cancel" validate="false">
-			<forward name="success" path="newsList.page" />
 		</action>
 
 	</action-mappings>

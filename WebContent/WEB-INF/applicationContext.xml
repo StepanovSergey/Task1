@@ -29,7 +29,7 @@
 
 	<!-- Actions -->
 	<bean
-		name="/NewsList, /ViewNews, /EditNews, /DeleteNews, /DeleteNewsGroup, /AddNews, /Save, /Cancel, /ChangeLocale"
+		name="/NewsList, /ViewNews, /EditNews, /DeleteNews, /DeleteNews, /AddNews, /SaveNews, /Cancel, /ChangeLocale"
 		id="newsAction" class="com.epam.news.actions.NewsAction">
 		<property name="dao">
 			<ref bean="DAO" />

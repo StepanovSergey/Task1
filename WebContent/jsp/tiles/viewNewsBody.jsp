@@ -38,9 +38,10 @@
 				<html:hidden name="news" property="id" />
 			</html:form></td>
 		<td><html:form action="/DeleteNews">
-				<html:submit property="id">
+				<html:submit>
 					<bean:message key="news.delete" />
 				</html:submit>
+				<html:hidden name="news" property="id" />
 			</html:form></td>
 	</tr>
 </table>
