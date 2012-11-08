@@ -1,6 +1,9 @@
 package com.epam.news.actions;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +17,11 @@ import org.apache.struts.actions.MappingDispatchAction;
 
 import com.epam.news.bean.News;
 import com.epam.news.database.DAO;
+import com.epam.news.forms.DeleteNewsForm;
 import com.epam.news.forms.NewsForm;
 
 public class NewsAction extends MappingDispatchAction {
+    private static final String MAIN_PAGE = "mainPage";
     private static final String NEWS_LIST_PAGE = "newsList";
     private static final String VIEW_NEWS_PAGE = "viewNews";
     private static final String ADD_NEWS_PAGE = "addNews";
@@ -51,7 +56,7 @@ public class NewsAction extends MappingDispatchAction {
 	String target = ERROR_PAGE;
 	setPageHistory(request, NEWS_LIST_PAGE);
 	NewsForm newsForm = (NewsForm) form;
-	ArrayList<News> newsList = (ArrayList<News>) dao.getAll();
+	List<News> newsList = dao.getAll();
 	if (newsList != null) {
 	    target = NEWS_LIST_PAGE;
 	    newsForm.setNewsList(newsList);
@@ -65,7 +70,11 @@ public class NewsAction extends MappingDispatchAction {
 	String target = ADD_NEWS_PAGE;
 	setPageHistory(request, ADD_NEWS_PAGE);
 	NewsForm newsForm = (NewsForm) form;
-	newsForm.setNews(new News());
+	News news = new News();
+	Calendar calendar = Calendar.getInstance();
+	Date today = new Date(calendar.getTimeInMillis());
+	news.setDate(today);
+	newsForm.setNews(news);
 	return mapping.findForward(target);
     }
 
@@ -86,14 +95,31 @@ public class NewsAction extends MappingDispatchAction {
     public ActionForward deleteNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
-	String target = ERROR_PAGE;
+	String target = "";
 	setPageHistory(request);
 	String idS = request.getParameter("id");
 	if (idS != null) {
 	    int id = Integer.parseInt(idS);
 	    System.out.println("You would to delete news with id = " + id);
-	    target = getPreviousPageForward(request);
-	    ;
+	    target = MAIN_PAGE;
+	}
+	return (mapping.findForward(target));
+    }
+
+    public ActionForward deleteGroupOfNews(ActionMapping mapping, ActionForm form,
+	    HttpServletRequest request, HttpServletResponse response)
+	    throws Exception {
+	String target = ERROR_PAGE;
+	setPageHistory(request);
+	if (form != null) {
+	    NewsForm newsForm = (NewsForm) form;
+	    Integer[] selectedItems = newsForm.getSelectedItems();
+	    if (selectedItems.length > 0) {
+		for (Integer id : selectedItems) {
+		    System.out.println("You would to delete news with id = " + id);
+		}
+	    }
+	    target = NEWS_LIST_PAGE;
 	}
 	return (mapping.findForward(target));
     }
@@ -102,7 +128,7 @@ public class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	setPageHistory(request);
-	String target = getPreviousPageForward(request);
+	String target = ERROR_PAGE;
 	String idS = request.getParameter("news.id");
 	if (idS != null) {
 	    int id = Integer.parseInt(idS);
@@ -113,6 +139,7 @@ public class NewsAction extends MappingDispatchAction {
 		// edit page save
 		editNewsSaveButton(form, id);
 	    }
+	    target = MAIN_PAGE;
 	}
 	return (mapping.findForward(target));
     }
@@ -164,7 +191,8 @@ public class NewsAction extends MappingDispatchAction {
 	return (String) session.getAttribute(PREVIOUS_PAGE);
     }
 
-    private String getNews(HttpServletRequest request, ActionForm form, String target) {
+    private String getNews(HttpServletRequest request, ActionForm form,
+	    String target) {
 	setPageHistory(request, target);
 	String idS = request.getParameter("id");
 	if (idS != null) {
@@ -177,14 +205,16 @@ public class NewsAction extends MappingDispatchAction {
 	}
 	return target;
     }
-    
-    private void addNewsSaveButton(ActionForm form, HttpServletRequest request){
+
+    private void addNewsSaveButton(ActionForm form, HttpServletRequest request) {
 	NewsForm newsForm = (NewsForm) form;
 	News news = newsForm.getNews();
+	System.out.println("You would to add news = " + news);
     }
-    
-    private void editNewsSaveButton(ActionForm form, int id){
+
+    private void editNewsSaveButton(ActionForm form, int id) {
 	NewsForm newsForm = (NewsForm) form;
 	News news = newsForm.getNews();
+	System.out.println("You would to edit news = " + news);
     }
 }

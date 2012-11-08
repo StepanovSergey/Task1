@@ -28,7 +28,7 @@ public class DAOImpl implements DAO {
     private Statement statement = null;
     private ResultSet resultSet = null;
     private PreparedStatement preparedStatement = null;
-    private static final String getAllQuery = "SELECT * FROM news";
+    private static final String getAllQuery = "SELECT * FROM news ORDER BY news_date desc";
     private static final String getByIdQuery = "SELECT * FROM news WHERE id=?";
     private static final String addNewsQuery = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
     private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";

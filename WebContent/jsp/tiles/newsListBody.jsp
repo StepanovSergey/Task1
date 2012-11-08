@@ -9,11 +9,9 @@
 <bean:message key="menu.news.list" />
 <br>
 <br>
-<html:form action="/DeleteNews">
+<html:form action="/DeleteGroupOfNews" onsubmit="return deleteGroupOfNews()">
 	<logic:empty name="newsForm" property="newsList">
-
 		<bean:message key="news.noNews" />
-
 	</logic:empty>
 	<logic:iterate id="news" property="newsList" name="newsForm">
 		<table class="newsListTable">
@@ -40,6 +38,7 @@
 			</tr>
 		</table>
 	</logic:iterate>
+	<logic:notEmpty name="newsForm" property="newsList">
 	<table class="newsListTable">
 		<tr>
 			<td class="afterTableButtons"><html:submit>
@@ -47,5 +46,6 @@
 				</html:submit></td>
 		</tr>
 	</table>
+	</logic:notEmpty>
 </html:form>
 <br>

@@ -63,12 +63,11 @@ body{
 }
 
 .menu_ul {
-	color: #33DDFF;
 	background-color: white;
 	margin-left: 50px;
 	margin-right: 10px;
 	padding-bottom: 20px;
-	list-style-type: disc;
+	list-style-image: url("../img/disc.jpg");
 }
 .menu_ul li{
 	padding-top: 5px;

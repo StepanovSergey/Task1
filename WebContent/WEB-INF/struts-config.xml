@@ -8,13 +8,6 @@
 	<!-- Forms -->
 	<form-beans>
 		<form-bean name="newsForm" type="com.epam.news.forms.NewsForm" />
-		<form-bean name="newsListForm" type="com.epam.news.forms.NewsListForm" />
-		<form-bean name="changeLocaleForm" type="com.epam.news.forms.ChangeLocaleForm" />
-		<form-bean name="deleteNewsForm" type="com.epam.news.forms.DeleteNewsForm" />
-		<form-bean name="viewNewsForm" type="com.epam.news.forms.ViewNewsForm" />
-		<form-bean name="editNewsForm" type="com.epam.news.forms.EditNewsForm" />
-		<form-bean name="saveNewsForm" type="com.epam.news.forms.SaveNewsForm" />
-		<form-bean name="cancelForm" type="com.epam.news.forms.CancelForm" />
 	</form-beans>
 
 	<!-- Global forwards -->
@@ -50,6 +43,11 @@
 			parameter="editNews" validate="false">
 		</action>
 
+		<action path="/DeleteGroupOfNews" name="newsForm"
+		type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="deleteGroupOfNews" validate="false">
+		</action>
+		
 		<action path="/DeleteNews" name="newsForm"
 		type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="deleteNews" validate="false">
