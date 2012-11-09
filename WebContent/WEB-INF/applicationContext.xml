@@ -6,6 +6,14 @@
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
+	<!-- Connection pool -->
+	<bean id="connectionPool" class="com.epam.news.database.ConnectionPool"
+		init-method="init" destroy-method="closeAllConnections">
+		<property name="dbParameters">
+			<ref bean="dataBaseParameters" />
+		</property>
+	</bean>
+
 	<!-- Database parameters -->
 	<bean id="dataBaseParameters" class="com.epam.news.utils.DataBaseParameters">
 		<property name="URI" value="jdbc:oracle:thin:@localhost:1521:XE" />
@@ -13,14 +21,6 @@
 		<property name="user" value="SYSTEM" />
 		<property name="password" value="root" />
 		<property name="poolSize" value="5" />
-	</bean>
-
-	<!-- Connection pool -->
-	<bean id="connectionPool" class="com.epam.news.database.ConnectionPool"
-		init-method="init" destroy-method="closeAllConnections">
-		<property name="dbParameters">
-			<ref bean="dataBaseParameters" />
-		</property>
 	</bean>
 
 	<!-- DAO -->

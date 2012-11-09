@@ -44,12 +44,12 @@
 		</action>
 
 		<action path="/DeleteGroupOfNews" name="newsForm"
-		type="org.springframework.web.struts.DelegatingActionProxy"
+			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="deleteGroupOfNews" validate="false">
 		</action>
-		
+
 		<action path="/DeleteNews" name="newsForm"
-		type="org.springframework.web.struts.DelegatingActionProxy"
+			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="deleteNews" validate="false">
 		</action>
 

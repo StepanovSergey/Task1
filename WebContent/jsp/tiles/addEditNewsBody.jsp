@@ -11,7 +11,7 @@
 <br>
 <br>
 
-<html:form onsubmit="return validateAddEditNewsForm(this)">
+<html:form>
 	<table>
 		<tr>
 			<td class="newsTableTitles"><bean:message key='news.title' /></td>
@@ -32,7 +32,7 @@
 	</table>
 	<table class="newsListTable">
 		<tr>
-			<td class="afterTableButtons"><html:submit onclick="this.form.action='/Task1/SaveNews.do'">
+			<td class="afterTableButtons"><html:submit onclick="return validateAddEditNewsForm(this)">
 					<bean:message key="news.save" />
 				</html:submit> <html:hidden name="newsForm" property="news.id" /></td>
 			<td><html:submit onclick="this.form.action='/Task1/Cancel.do'">

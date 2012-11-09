@@ -1,14 +1,12 @@
 package com.epam.news.actions;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -17,7 +15,6 @@ import org.apache.struts.actions.MappingDispatchAction;
 
 import com.epam.news.bean.News;
 import com.epam.news.database.DAO;
-import com.epam.news.forms.DeleteNewsForm;
 import com.epam.news.forms.NewsForm;
 
 public class NewsAction extends MappingDispatchAction {
@@ -28,7 +25,6 @@ public class NewsAction extends MappingDispatchAction {
     private static final String EDIT_NEWS_PAGE = "editNews";
     private static final String ERROR_PAGE = "error";
     private static final String PREVIOUS_PAGE = "previousPage";
-    private static final String CURRENT_PAGE = "currentPage";
     private DAO dao;
 
     /**
@@ -54,7 +50,7 @@ public class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	String target = ERROR_PAGE;
-	setPageHistory(request, NEWS_LIST_PAGE);
+	request.getSession().setAttribute(PREVIOUS_PAGE, NEWS_LIST_PAGE);
 	NewsForm newsForm = (NewsForm) form;
 	List<News> newsList = dao.getAll();
 	if (newsList != null) {
@@ -68,7 +64,6 @@ public class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	String target = ADD_NEWS_PAGE;
-	setPageHistory(request, ADD_NEWS_PAGE);
 	NewsForm newsForm = (NewsForm) form;
 	News news = new News();
 	Calendar calendar = Calendar.getInstance();
@@ -81,22 +76,28 @@ public class NewsAction extends MappingDispatchAction {
     public ActionForward editNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
-	String target = getNews(request, form, EDIT_NEWS_PAGE);
+	String target = ERROR_PAGE;
+	if (setNewsDetails(request, form)) {
+	    target = EDIT_NEWS_PAGE;
+	}
 	return (mapping.findForward(target));
     }
 
     public ActionForward viewNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
-	String target = getNews(request, form, VIEW_NEWS_PAGE);
+	String target = ERROR_PAGE;
+	if (setNewsDetails(request, form)) {
+	    target = VIEW_NEWS_PAGE;
+	}
+	request.getSession().setAttribute(PREVIOUS_PAGE, VIEW_NEWS_PAGE);
 	return (mapping.findForward(target));
     }
 
     public ActionForward deleteNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
-	String target = "";
-	setPageHistory(request);
+	String target = ERROR_PAGE;
 	String idS = request.getParameter("id");
 	if (idS != null) {
 	    int id = Integer.parseInt(idS);
@@ -106,17 +107,17 @@ public class NewsAction extends MappingDispatchAction {
 	return (mapping.findForward(target));
     }
 
-    public ActionForward deleteGroupOfNews(ActionMapping mapping, ActionForm form,
-	    HttpServletRequest request, HttpServletResponse response)
-	    throws Exception {
+    public ActionForward deleteGroupOfNews(ActionMapping mapping,
+	    ActionForm form, HttpServletRequest request,
+	    HttpServletResponse response) throws Exception {
 	String target = ERROR_PAGE;
-	setPageHistory(request);
 	if (form != null) {
 	    NewsForm newsForm = (NewsForm) form;
 	    Integer[] selectedItems = newsForm.getSelectedItems();
 	    if (selectedItems.length > 0) {
 		for (Integer id : selectedItems) {
-		    System.out.println("You would to delete news with id = " + id);
+		    System.out.println("You would to delete news with id = "
+			    + id);
 		}
 	    }
 	    target = NEWS_LIST_PAGE;
@@ -127,7 +128,6 @@ public class NewsAction extends MappingDispatchAction {
     public ActionForward save(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
-	setPageHistory(request);
 	String target = ERROR_PAGE;
 	String idS = request.getParameter("news.id");
 	if (idS != null) {
@@ -147,10 +147,9 @@ public class NewsAction extends MappingDispatchAction {
     public ActionForward cancel(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
-	setPageHistory(request);
-	NewsForm newsForm = (NewsForm) form;
-	newsForm.setNews(new News());
-	String target = NEWS_LIST_PAGE;
+	String previousPage = (String) request.getSession().getAttribute(
+		PREVIOUS_PAGE);
+	String target = previousPage;
 	return (mapping.findForward(target));
     }
 
@@ -158,7 +157,6 @@ public class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	String target = ERROR_PAGE;
-	setPageHistory(request);
 	if (form != null) {
 	    NewsForm newsForm = (NewsForm) form;
 	    String lang = newsForm.getLang();
@@ -167,43 +165,32 @@ public class NewsAction extends MappingDispatchAction {
 	    } else {
 		setLocale(request, new Locale("en"));
 	    }
-	    target = getPreviousPageForward(request);
+	    target = (String) request.getSession().getAttribute(PREVIOUS_PAGE);
 	}
 	return (mapping.findForward(target));
     }
 
-    private void setPageHistory(HttpServletRequest request, String currentPage) {
-	HttpSession session = request.getSession();
-	String previousPage = (String) session.getAttribute(CURRENT_PAGE);
-	session.setAttribute(PREVIOUS_PAGE, previousPage);
-	if (currentPage.equals("prevPage")) {
-	    currentPage = previousPage;
-	}
-	session.setAttribute(CURRENT_PAGE, currentPage);
-    }
-
-    private void setPageHistory(HttpServletRequest request) {
-	setPageHistory(request, "prevPage");
-    }
-
-    private String getPreviousPageForward(HttpServletRequest request) {
-	HttpSession session = request.getSession();
-	return (String) session.getAttribute(PREVIOUS_PAGE);
-    }
-
-    private String getNews(HttpServletRequest request, ActionForm form,
-	    String target) {
-	setPageHistory(request, target);
+    private boolean setNewsDetails(HttpServletRequest request, ActionForm form) {
 	String idS = request.getParameter("id");
 	if (idS != null) {
+	    request.getSession().setAttribute("id", idS);
 	    int id = Integer.parseInt(idS);
+	    NewsForm newsForm = (NewsForm) form;
 	    News news = dao.getById(id);
+	    newsForm.setNews(news);
+	    return true;
+	} else {
+	    NewsForm newsForm = (NewsForm) form;
+	    News news = newsForm.getNews();
 	    if (news != null) {
-		NewsForm newsForm = (NewsForm) form;
+		int id = newsForm.getNews().getId();
+		news = dao.getById(id);
 		newsForm.setNews(news);
+		return true;
+	    } else {
+		return false;
 	    }
 	}
-	return target;
     }
 
     private void addNewsSaveButton(ActionForm form, HttpServletRequest request) {
