@@ -36,22 +36,33 @@ public interface DAO {
      * 
      * @param news
      *            news to add
+     * @return number of affected rows. Must be equal 1.
      */
-    public void addNews(News news);
+    public int addNews(News news);
 
     /**
      * Update news
      * 
      * @param news
      *            news to update
+     * @return number of affected rows. Must be equal 1.
      */
-    public void updateNews(News news);
+    public int updateNews(News news);
 
     /**
      * Delete many news by ids
      * 
      * @param ids
      *            array of ids
+     * @return number of affected rows
      */
-    public void deleteManyNews(Integer[] ids);
+    public int deleteManyNews(Integer[] ids);
+
+    /**
+     * @param id
+     *            the id of news
+     * @return number of affected rows. Must be equal 1.
+     */
+    public int deleteNews(int id);
+
 }

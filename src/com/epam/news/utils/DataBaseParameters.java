@@ -1,5 +1,11 @@
 package com.epam.news.utils;
 
+/**
+ * This class provides data base parameters for establishing connections.
+ * 
+ * @author Siarhei_Stsiapanau
+ * 
+ */
 public class DataBaseParameters {
     private String driverClass;
     private String URI;

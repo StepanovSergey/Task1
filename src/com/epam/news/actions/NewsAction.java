@@ -17,6 +17,12 @@ import com.epam.news.bean.News;
 import com.epam.news.database.DAO;
 import com.epam.news.forms.NewsForm;
 
+/**
+ * This class provides all actions of application.
+ * 
+ * @author Siarhei_Stsiapanau
+ * 
+ */
 public class NewsAction extends MappingDispatchAction {
     private static final String MAIN_PAGE = "mainPage";
     private static final String NEWS_LIST_PAGE = "newsList";
@@ -46,6 +52,21 @@ public class NewsAction extends MappingDispatchAction {
 	this.dao = dao;
     }
 
+    /**
+     * Action named /NewsList. Shows list of all news.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward viewNewsList(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
@@ -60,6 +81,21 @@ public class NewsAction extends MappingDispatchAction {
 	return mapping.findForward(target);
     }
 
+    /**
+     * Action named /AddNews. Forwards to Add News page
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward addNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
@@ -73,6 +109,21 @@ public class NewsAction extends MappingDispatchAction {
 	return mapping.findForward(target);
     }
 
+    /**
+     * Action named /EditNews. Forwards to Edit News page.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward editNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
@@ -83,6 +134,21 @@ public class NewsAction extends MappingDispatchAction {
 	return (mapping.findForward(target));
     }
 
+    /**
+     * Action named /ViewNews. Forwards to View News page.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward viewNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
@@ -94,6 +160,22 @@ public class NewsAction extends MappingDispatchAction {
 	return (mapping.findForward(target));
     }
 
+    /**
+     * Action named /DeleteNews. Delete news from View News page or Edit News
+     * page.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward deleteNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
@@ -101,12 +183,29 @@ public class NewsAction extends MappingDispatchAction {
 	String idS = request.getParameter("id");
 	if (idS != null) {
 	    int id = Integer.parseInt(idS);
+
 	    System.out.println("You would to delete news with id = " + id);
 	    target = MAIN_PAGE;
 	}
 	return (mapping.findForward(target));
     }
 
+    /**
+     * Action named /DeleteGroupOfNews. Delete one or more news from News List
+     * page.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward deleteGroupOfNews(ActionMapping mapping,
 	    ActionForm form, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
@@ -125,6 +224,22 @@ public class NewsAction extends MappingDispatchAction {
 	return (mapping.findForward(target));
     }
 
+    /**
+     * Action named /Save. Save current news from Add News page or Edit News
+     * page.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward save(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
@@ -144,6 +259,22 @@ public class NewsAction extends MappingDispatchAction {
 	return (mapping.findForward(target));
     }
 
+    /**
+     * Action named /Cancel. Cancel current operation and go back to previous
+     * page.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward cancel(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
@@ -153,6 +284,21 @@ public class NewsAction extends MappingDispatchAction {
 	return (mapping.findForward(target));
     }
 
+    /**
+     * Action named /ChangeLocale. Changes current locale to another.
+     * 
+     * @param mapping
+     *            ActionMapping of this action
+     * @param form
+     *            form of this action
+     * @param request
+     *            current request
+     * @param response
+     *            current response
+     * @return forward to page
+     * @throws Exception
+     *             if something is wrong
+     */
     public ActionForward changeLocale(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {

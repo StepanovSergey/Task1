@@ -33,6 +33,7 @@ public class DAOImpl implements DAO {
     private static final String addNewsQuery = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
     private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";
     private static final String deleteManyNewsQuery = "DELETE FROM news WHERE id IN (";
+    private static final String deleteNewsQuery = "DELETE FROM news WHERE id=?";
 
     @Override
     public List<News> getAll() {
@@ -75,26 +76,29 @@ public class DAOImpl implements DAO {
     }
 
     @Override
-    public void addNews(News news) {
+    public int addNews(News news) {
 	connection = ConnectionPool.getConnection();
+	int result = 0;
 	try {
 	    preparedStatement = connection.prepareStatement(addNewsQuery);
 	    preparedStatement.setString(1, news.getTitle());
 	    preparedStatement.setDate(2, news.getDate());
 	    preparedStatement.setString(3, news.getBrief());
 	    preparedStatement.setString(4, news.getContent());
-	    preparedStatement.executeUpdate();
+	    result = preparedStatement.executeUpdate();
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
 	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
+	return result;
     }
 
     @Override
-    public void updateNews(News news) {
+    public int updateNews(News news) {
 	connection = ConnectionPool.getConnection();
+	int result = 0;
 	try {
 	    preparedStatement = connection.prepareStatement(updateNewsQuery);
 	    preparedStatement.setString(1, news.getTitle());
@@ -102,29 +106,48 @@ public class DAOImpl implements DAO {
 	    preparedStatement.setString(3, news.getBrief());
 	    preparedStatement.setString(4, news.getContent());
 	    preparedStatement.setInt(5, news.getId());
-	    preparedStatement.executeUpdate();
+	    result = preparedStatement.executeUpdate();
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
 	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
+	return result;
     }
 
     @Override
-    public void deleteManyNews(Integer[] ids) {
-	Connection connection = ConnectionPool.getConnection();
+    public int deleteNews(int id) {
+	connection = ConnectionPool.getConnection();
+	int result = 0;
 	try {
-	    statement = connection.createStatement();
-	    String deleteManyNewsQuery = createDeleteManyNewsQuery(ids);
-	    System.out.println("Delete news query = " + deleteManyNewsQuery);
-	    statement.executeUpdate(deleteManyNewsQuery);
+	    preparedStatement = connection.prepareStatement(deleteNewsQuery);
+	    preparedStatement.setInt(1, id);
+	    result = preparedStatement.executeUpdate();
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
 	    releaseResources(statement, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
+	return result;
+    }
+
+    @Override
+    public int deleteManyNews(Integer[] ids) {
+	Connection connection = ConnectionPool.getConnection();
+	int result = 0;
+	try {
+	    statement = connection.createStatement();
+	    String deleteManyNewsQuery = createDeleteManyNewsQuery(ids);
+	    result = statement.executeUpdate(deleteManyNewsQuery);
+	} catch (SQLException e) {
+	    log.error(e.getMessage(), e);
+	} finally {
+	    releaseResources(statement, preparedStatement, resultSet);
+	    ConnectionPool.releaseConnection(connection);
+	}
+	return result;
     }
 
     /**
