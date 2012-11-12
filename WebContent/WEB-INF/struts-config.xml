@@ -25,52 +25,52 @@
 
 		<action path="/NewsList" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="viewNewsList" validate="false">
+			parameter="viewNewsList">
 		</action>
 
 		<action path="/ChangeLocale" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="changeLocale" validate="false">
+			parameter="changeLocale">
 		</action>
 
 		<action path="/ViewNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="viewNews" validate="false" scope="session">
+			parameter="viewNews" scope="session">
 		</action>
 
 		<action path="/EditNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="editNews" validate="false">
+			parameter="editNews">
 		</action>
 
 		<action path="/DeleteGroupOfNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="deleteGroupOfNews" validate="false">
+			parameter="deleteGroupOfNews">
 		</action>
 
 		<action path="/DeleteNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="deleteNews" validate="false">
+			parameter="deleteGroupOfNews">
 		</action>
 
 		<action path="/AddNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="addNews" validate="false">
+			parameter="addNews">
 		</action>
 
 		<action path="/SaveNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="save" validate="false">
+			parameter="save">
 		</action>
 
 		<action path="/Cancel" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="cancel" validate="false">
+			parameter="cancel">
 		</action>
 		
 		<action path="/Back" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="back" validate="false">
+			parameter="back">
 		</action>
 
 	</action-mappings>

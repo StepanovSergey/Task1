@@ -18,7 +18,7 @@ import com.epam.news.utils.DataBaseParameters;
  * @author Siarhei_Stsiapanau
  * 
  */
-public class ConnectionPool {
+public final class ConnectionPool {
     private static final Logger log = Logger.getLogger(ConnectionPool.class);
     private static DataBaseParameters dbParameters;
     private static Queue<Connection> occupiedConnections = new ConcurrentLinkedQueue<Connection>();

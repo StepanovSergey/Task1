@@ -5,7 +5,7 @@
   "http://struts.apache.org/dtds/tiles-config_1_1.dtd">
 
 <tiles-definitions>
-	<definition name="layout" path="/jsp/layouts/layout.jsp">
+	<definition name="layout" path="/jsp/layouts/newsLayout.jsp">
 		<put name="title" value="default page" />
 		<put name="headerTitle" value="/jsp/tiles/headerTitle.jsp" />
 		<put name="headerLang" value="/jsp/tiles/headerLang.jsp" />

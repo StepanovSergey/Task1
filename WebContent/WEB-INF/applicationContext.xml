@@ -24,15 +24,15 @@
 	</bean>
 
 	<!-- DAO -->
-	<bean id="DAO" class="com.epam.news.database.DAOImpl">
+	<bean id="NewsDao" class="com.epam.news.database.NewsDAO">
 	</bean>
 
 	<!-- Actions -->
 	<bean
 		name="/NewsList, /ViewNews, /EditNews, /DeleteNews, /DeleteGroupOfNews, /AddNews, /SaveNews, /Cancel, /ChangeLocale, /Back"
 		id="newsAction" class="com.epam.news.actions.NewsAction">
-		<property name="dao">
-			<ref bean="DAO" />
+		<property name="newsDao">
+			<ref bean="NewsDao" />
 		</property>
 	</bean>
 </beans>

@@ -5,6 +5,7 @@ function deleteGroupOfNews() {
 			return confirmDialog();
 		}
 	}
+	alert(notChecked);
 	return false;
 }
 

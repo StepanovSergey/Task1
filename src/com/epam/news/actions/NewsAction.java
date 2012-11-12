@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.MappingDispatchAction;
 
 import com.epam.news.bean.News;
-import com.epam.news.database.DAO;
+import com.epam.news.database.NewsDAO;
 import com.epam.news.forms.NewsForm;
 
 /**
@@ -24,7 +24,7 @@ import com.epam.news.forms.NewsForm;
  * @author Siarhei_Stsiapanau
  * 
  */
-public class NewsAction extends MappingDispatchAction {
+public final class NewsAction extends MappingDispatchAction {
     private static final Logger log = Logger.getLogger(NewsAction.class);
     private static final String MAIN_PAGE = "mainPage";
     private static final String NEWS_LIST_PAGE = "newsList";
@@ -33,25 +33,21 @@ public class NewsAction extends MappingDispatchAction {
     private static final String EDIT_NEWS_PAGE = "editNews";
     private static final String ERROR_PAGE = "error";
     private static final String PREVIOUS_PAGE = "previousPage";
-    private DAO dao;
+    private NewsDAO newsDao;
 
     /**
-     * Get DAO
-     * 
-     * @return the dao
+     * @return the newsDao
      */
-    public DAO getDao() {
-	return dao;
+    public NewsDAO getNewsDao() {
+	return newsDao;
     }
 
     /**
-     * Set DAO
-     * 
-     * @param dao
-     *            the dao to set
+     * @param newsDao
+     *            the newsDao to set
      */
-    public void setDao(DAO dao) {
-	this.dao = dao;
+    public void setNewsDao(NewsDAO newsDao) {
+	this.newsDao = newsDao;
     }
 
     /**
@@ -75,7 +71,7 @@ public class NewsAction extends MappingDispatchAction {
 	String target = ERROR_PAGE;
 	request.getSession().setAttribute(PREVIOUS_PAGE, NEWS_LIST_PAGE);
 	NewsForm newsForm = (NewsForm) form;
-	List<News> newsList = dao.getAll();
+	List<News> newsList = newsDao.getAll();
 	if (newsList != null) {
 	    target = NEWS_LIST_PAGE;
 	    newsForm.setNewsList(newsList);
@@ -182,15 +178,14 @@ public class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	String target = ERROR_PAGE;
-	String idS = request.getParameter("id");
-	if (idS != null) {
-	    int id = Integer.parseInt(idS);
-	    int result = dao.deleteNews(id);
+	NewsForm newsForm = (NewsForm) form;
+	if (newsForm != null) {
+	    int id = newsForm.getNews().getId();
+	    Integer[] ids = { id };
+	    int result = newsDao.deleteManyNews(ids);
 	    if (result == 1) {
 		target = MAIN_PAGE;
 		log.info("News delete with id = " + id);
-		NewsForm newsForm = (NewsForm) form;
-		newsForm.setMessage("DELETED!!!");
 	    }
 	}
 	return (mapping.findForward(target));
@@ -220,7 +215,7 @@ public class NewsAction extends MappingDispatchAction {
 	    NewsForm newsForm = (NewsForm) form;
 	    Integer[] selectedItems = newsForm.getSelectedItems();
 	    if (selectedItems.length > 0) {
-		int result = dao.deleteManyNews(selectedItems);
+		int result = newsDao.deleteManyNews(selectedItems);
 		if (result > 0) {
 		    target = MAIN_PAGE;
 		    log.info("News multiple delete");
@@ -250,15 +245,14 @@ public class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	String target = ERROR_PAGE;
-	String idS = request.getParameter("news.id");
-	if (idS != null) {
-	    int id = Integer.parseInt(idS);
-	    NewsForm newsForm = (NewsForm) form;
+	NewsForm newsForm = (NewsForm) form;
+	if (newsForm != null) {
+	    int id = newsForm.getNews().getId();
 	    boolean result = false;
 	    if (id == 0) {
 		// add page save
-		String title = request.getParameter("news.title");
-		int numRows = dao.getByTitle(title);
+		String title = newsForm.getNews().getTitle();
+		int numRows = newsDao.getByTitle(title);
 		if (numRows == 0) {
 		    result = addNewsSaveButton(newsForm);
 		}
@@ -267,8 +261,7 @@ public class NewsAction extends MappingDispatchAction {
 		result = editNewsSaveButton(newsForm, id);
 	    }
 	    if (result) {
-		target = MAIN_PAGE;
-		
+		target = VIEW_NEWS_PAGE;
 	    }
 	}
 	return (mapping.findForward(target));
@@ -326,44 +319,28 @@ public class NewsAction extends MappingDispatchAction {
 	if (form != null) {
 	    NewsForm newsForm = (NewsForm) form;
 	    String lang = newsForm.getLang();
-	    if ("ru".equals(lang)) {
-		setLocale(request, new Locale("ru"));
-	    } else {
-		setLocale(request, new Locale("en"));
-	    }
+	    setLocale(request, new Locale(lang));
 	    target = (String) request.getSession().getAttribute(PREVIOUS_PAGE);
 	}
 	return (mapping.findForward(target));
     }
 
     private boolean setNewsDetails(HttpServletRequest request, ActionForm form) {
-	String idS = request.getParameter("id");
-	if (idS != null) {
-	    request.getSession().setAttribute("id", idS);
-	    int id = Integer.parseInt(idS);
-	    NewsForm newsForm = (NewsForm) form;
-	    News news = dao.getById(id);
+	NewsForm newsForm = (NewsForm) form;
+	if (newsForm != null) {
+	    int id = newsForm.getNews().getId();
+	    News news = newsDao.getById(id);
 	    newsForm.setNews(news);
 	    return true;
 	} else {
-	    NewsForm newsForm = (NewsForm) form;
-	    News news = newsForm.getNews();
-	    if (news != null) {
-		int id = newsForm.getNews().getId();
-		news = dao.getById(id);
-		newsForm.setNews(news);
-		return true;
-	    } else {
-		return false;
-	    }
+	    return false;
 	}
     }
 
     private boolean addNewsSaveButton(NewsForm form) {
 	NewsForm newsForm = (NewsForm) form;
 	News news = newsForm.getNews();
-	int result = dao.addNews(news);
-	System.out.println("Add result = " + result);
+	int result = newsDao.addNews(news);
 	if (result > 0) {
 	    log.info("Add news");
 	    return true;
@@ -374,8 +351,7 @@ public class NewsAction extends MappingDispatchAction {
     private boolean editNewsSaveButton(NewsForm form, int id) {
 	NewsForm newsForm = (NewsForm) form;
 	News news = newsForm.getNews();
-	System.out.println("Edit news save button news = " + news.toString());
-	int result = dao.updateNews(news);
+	int result = newsDao.updateNews(news);
 	if (result > 0) {
 	    log.info("Edit news with id = " + news.getId());
 	    return true;

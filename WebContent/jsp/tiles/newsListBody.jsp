@@ -8,7 +8,8 @@
 <bean:message key="menu.news.list" />
 <br>
 <br>
-<html:form action="/DeleteGroupOfNews" onsubmit="return deleteGroupOfNews()">
+<html:form action="/DeleteGroupOfNews"
+	onsubmit="return deleteGroupOfNews()">
 	<logic:empty name="newsForm" property="newsList">
 		<bean:message key="news.noNews" />
 	</logic:empty>
@@ -26,10 +27,10 @@
 			<tr>
 				<bean:define name="news" id="newsId" property="id" />
 				<td class='newsListTableLinks' colspan="2"><html:link
-						action="ViewNews" paramName="newsId" paramId="id">
+						action="ViewNews" paramName="newsId" paramId="news.id">
 						<bean:message key="news.list.view"></bean:message>
 					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:link action="EditNews"
-						paramName="newsId" paramId="id">
+						paramName="newsId" paramId="news.id">
 						<bean:message key="news.list.edit"></bean:message>
 					</html:link> &nbsp;&nbsp;&nbsp;&nbsp; <html:multibox property="selectedItems">
 						<bean:write name='news' property='id' />
@@ -38,13 +39,13 @@
 		</table>
 	</logic:iterate>
 	<logic:notEmpty name="newsForm" property="newsList">
-	<table class="newsListTable">
-		<tr>
-			<td class="afterTableButtons"><html:submit>
-					<bean:message key="news.delete" />
-				</html:submit></td>
-		</tr>
-	</table>
+		<table class="newsListTable">
+			<tr>
+				<td class="afterTableButtons"><html:submit>
+						<bean:message key="news.delete" />
+					</html:submit></td>
+			</tr>
+		</table>
 	</logic:notEmpty>
 </html:form>
 <br>

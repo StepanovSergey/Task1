@@ -18,24 +18,21 @@ import com.epam.news.bean.News;
  * @author Siarhei_Stsiapanau
  * 
  */
-public class DAOImpl implements DAO {
-    private static final Logger log = Logger.getLogger(DAOImpl.class);
-    private Connection connection;
-    private Statement statement = null;
-    private ResultSet resultSet = null;
-    private PreparedStatement preparedStatement = null;
+public final class NewsDAO implements INewsDao {
+    private static final Logger log = Logger.getLogger(NewsDAO.class);
     private static final String getAllQuery = "SELECT * FROM news ORDER BY news_date desc";
     private static final String getByIdQuery = "SELECT * FROM news WHERE id=?";
     private static final String addNewsQuery = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
     private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";
     private static final String deleteManyNewsQuery = "DELETE FROM news WHERE id IN (";
-    private static final String deleteNewsQuery = "DELETE FROM news WHERE id=?";
     private static final String getByTitleNewsQuery = "SELECT title FROM news WHERE title = ?";
 
     @Override
     public List<News> getAll() {
 	List<News> allNews = new ArrayList<News>();
 	Connection connection = ConnectionPool.getConnection();
+	Statement statement = null;
+	ResultSet resultSet = null;
 	try {
 	    statement = connection.createStatement();
 	    resultSet = statement.executeQuery(getAllQuery);
@@ -46,7 +43,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, preparedStatement, resultSet);
+	    releaseResources(statement, null, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return allNews;
@@ -56,17 +53,19 @@ public class DAOImpl implements DAO {
     public News getById(int id) {
 	News news = new News();
 	Connection connection = ConnectionPool.getConnection();
+	PreparedStatement preparedStatement = null;
+	ResultSet resultSet = null;
 	try {
 	    preparedStatement = connection.prepareStatement(getByIdQuery);
 	    preparedStatement.setInt(1, id);
-	    ResultSet resultSet = preparedStatement.executeQuery();
+	    resultSet = preparedStatement.executeQuery();
 	    while (resultSet.next()) {
 		news = setParameters(resultSet);
 	    }
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, preparedStatement, resultSet);
+	    releaseResources(null, preparedStatement, resultSet);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return news;
@@ -74,7 +73,8 @@ public class DAOImpl implements DAO {
 
     @Override
     public int addNews(News news) {
-	connection = ConnectionPool.getConnection();
+	Connection connection = ConnectionPool.getConnection();
+	PreparedStatement preparedStatement = null;
 	int result = 0;
 	try {
 	    preparedStatement = connection.prepareStatement(addNewsQuery);
@@ -86,7 +86,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, preparedStatement, resultSet);
+	    releaseResources(null, preparedStatement, null);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return result;
@@ -94,7 +94,8 @@ public class DAOImpl implements DAO {
 
     @Override
     public int updateNews(News news) {
-	connection = ConnectionPool.getConnection();
+	Connection connection = ConnectionPool.getConnection();
+	PreparedStatement preparedStatement = null;
 	int result = 0;
 	try {
 	    preparedStatement = connection.prepareStatement(updateNewsQuery);
@@ -107,24 +108,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, preparedStatement, resultSet);
-	    ConnectionPool.releaseConnection(connection);
-	}
-	return result;
-    }
-
-    @Override
-    public int deleteNews(int id) {
-	connection = ConnectionPool.getConnection();
-	int result = 0;
-	try {
-	    preparedStatement = connection.prepareStatement(deleteNewsQuery);
-	    preparedStatement.setInt(1, id);
-	    result = preparedStatement.executeUpdate();
-	} catch (SQLException e) {
-	    log.error(e.getMessage(), e);
-	} finally {
-	    releaseResources(statement, preparedStatement, resultSet);
+	    releaseResources(null, preparedStatement, null);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return result;
@@ -133,6 +117,7 @@ public class DAOImpl implements DAO {
     @Override
     public int deleteManyNews(Integer[] ids) {
 	Connection connection = ConnectionPool.getConnection();
+	Statement statement = null;
 	int result = 0;
 	try {
 	    statement = connection.createStatement();
@@ -141,7 +126,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, preparedStatement, resultSet);
+	    releaseResources(statement, null, null);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return result;
@@ -149,7 +134,8 @@ public class DAOImpl implements DAO {
 
     @Override
     public int getByTitle(String newsTitle) {
-	connection = ConnectionPool.getConnection();
+	Connection connection = ConnectionPool.getConnection();
+	PreparedStatement preparedStatement = null;
 	int result = 0;
 	try {
 	    preparedStatement = connection
@@ -162,7 +148,7 @@ public class DAOImpl implements DAO {
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(statement, preparedStatement, resultSet);
+	    releaseResources(null, preparedStatement, null);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return result;
@@ -244,4 +230,6 @@ public class DAOImpl implements DAO {
 	    }
 	}
     }
+
+
 }

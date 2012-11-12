@@ -14,7 +14,7 @@ import com.epam.news.bean.News;
  * @author Sergey
  * 
  */
-public interface DAO {
+public interface INewsDao {
     /**
      * Get all news from database
      * 
@@ -57,15 +57,6 @@ public interface DAO {
      * @return number of affected rows
      */
     public int deleteManyNews(Integer[] ids);
-
-    /**
-     * Delete one news
-     * 
-     * @param id
-     *            the id of news
-     * @return number of affected rows. Must be equal 1.
-     */
-    public int deleteNews(int id);
 
     /**
      * Get news by its title
