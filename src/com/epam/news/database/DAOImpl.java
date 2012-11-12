@@ -18,10 +18,6 @@ import com.epam.news.bean.News;
  * @author Siarhei_Stsiapanau
  * 
  */
-/**
- * @author Siarhei_Stsiapanau
- * 
- */
 public class DAOImpl implements DAO {
     private static final Logger log = Logger.getLogger(DAOImpl.class);
     private Connection connection;
@@ -34,6 +30,7 @@ public class DAOImpl implements DAO {
     private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";
     private static final String deleteManyNewsQuery = "DELETE FROM news WHERE id IN (";
     private static final String deleteNewsQuery = "DELETE FROM news WHERE id=?";
+    private static final String getByTitleNewsQuery = "SELECT title FROM news WHERE title = ?";
 
     @Override
     public List<News> getAll() {
@@ -141,6 +138,27 @@ public class DAOImpl implements DAO {
 	    statement = connection.createStatement();
 	    String deleteManyNewsQuery = createDeleteManyNewsQuery(ids);
 	    result = statement.executeUpdate(deleteManyNewsQuery);
+	} catch (SQLException e) {
+	    log.error(e.getMessage(), e);
+	} finally {
+	    releaseResources(statement, preparedStatement, resultSet);
+	    ConnectionPool.releaseConnection(connection);
+	}
+	return result;
+    }
+
+    @Override
+    public int getByTitle(String newsTitle) {
+	connection = ConnectionPool.getConnection();
+	int result = 0;
+	try {
+	    preparedStatement = connection
+		    .prepareStatement(getByTitleNewsQuery);
+	    preparedStatement.setString(1, newsTitle);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    while (resultSet.next()) {
+		result++;
+	    }
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {

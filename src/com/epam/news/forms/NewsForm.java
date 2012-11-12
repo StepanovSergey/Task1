@@ -23,6 +23,21 @@ public class NewsForm extends ActionForm {
     private News news = new News();
     private String lang;
     private Integer[] selectedItems;
+    private String message;
+
+    /**
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * @param message the message to set
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     /**
      * @return the selectedItems

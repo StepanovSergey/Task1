@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -24,6 +25,7 @@ import com.epam.news.forms.NewsForm;
  * 
  */
 public class NewsAction extends MappingDispatchAction {
+    private static final Logger log = Logger.getLogger(NewsAction.class);
     private static final String MAIN_PAGE = "mainPage";
     private static final String NEWS_LIST_PAGE = "newsList";
     private static final String VIEW_NEWS_PAGE = "viewNews";
@@ -183,9 +185,13 @@ public class NewsAction extends MappingDispatchAction {
 	String idS = request.getParameter("id");
 	if (idS != null) {
 	    int id = Integer.parseInt(idS);
-
-	    System.out.println("You would to delete news with id = " + id);
-	    target = MAIN_PAGE;
+	    int result = dao.deleteNews(id);
+	    if (result == 1) {
+		target = MAIN_PAGE;
+		log.info("News delete with id = " + id);
+		NewsForm newsForm = (NewsForm) form;
+		newsForm.setMessage("DELETED!!!");
+	    }
 	}
 	return (mapping.findForward(target));
     }
@@ -214,12 +220,12 @@ public class NewsAction extends MappingDispatchAction {
 	    NewsForm newsForm = (NewsForm) form;
 	    Integer[] selectedItems = newsForm.getSelectedItems();
 	    if (selectedItems.length > 0) {
-		for (Integer id : selectedItems) {
-		    System.out.println("You would to delete news with id = "
-			    + id);
+		int result = dao.deleteManyNews(selectedItems);
+		if (result > 0) {
+		    target = MAIN_PAGE;
+		    log.info("News multiple delete");
 		}
 	    }
-	    target = NEWS_LIST_PAGE;
 	}
 	return (mapping.findForward(target));
     }
@@ -247,14 +253,23 @@ public class NewsAction extends MappingDispatchAction {
 	String idS = request.getParameter("news.id");
 	if (idS != null) {
 	    int id = Integer.parseInt(idS);
+	    NewsForm newsForm = (NewsForm) form;
+	    boolean result = false;
 	    if (id == 0) {
 		// add page save
-		addNewsSaveButton(form, request);
+		String title = request.getParameter("news.title");
+		int numRows = dao.getByTitle(title);
+		if (numRows == 0) {
+		    result = addNewsSaveButton(newsForm);
+		}
 	    } else {
 		// edit page save
-		editNewsSaveButton(form, id);
+		result = editNewsSaveButton(newsForm, id);
 	    }
-	    target = MAIN_PAGE;
+	    if (result) {
+		target = MAIN_PAGE;
+		
+	    }
 	}
 	return (mapping.findForward(target));
     }
@@ -278,10 +293,15 @@ public class NewsAction extends MappingDispatchAction {
     public ActionForward cancel(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
-	String previousPage = (String) request.getSession().getAttribute(
+	String target = (String) request.getSession().getAttribute(
 		PREVIOUS_PAGE);
-	String target = previousPage;
 	return (mapping.findForward(target));
+    }
+
+    public ActionForward back(ActionMapping mapping, ActionForm form,
+	    HttpServletRequest request, HttpServletResponse response)
+	    throws Exception {
+	return cancel(mapping, form, request, response);
     }
 
     /**
@@ -339,15 +359,27 @@ public class NewsAction extends MappingDispatchAction {
 	}
     }
 
-    private void addNewsSaveButton(ActionForm form, HttpServletRequest request) {
+    private boolean addNewsSaveButton(NewsForm form) {
 	NewsForm newsForm = (NewsForm) form;
 	News news = newsForm.getNews();
-	System.out.println("You would to add news = " + news);
+	int result = dao.addNews(news);
+	System.out.println("Add result = " + result);
+	if (result > 0) {
+	    log.info("Add news");
+	    return true;
+	}
+	return false;
     }
 
-    private void editNewsSaveButton(ActionForm form, int id) {
+    private boolean editNewsSaveButton(NewsForm form, int id) {
 	NewsForm newsForm = (NewsForm) form;
 	News news = newsForm.getNews();
-	System.out.println("You would to edit news = " + news);
+	System.out.println("Edit news save button news = " + news.toString());
+	int result = dao.updateNews(news);
+	if (result > 0) {
+	    log.info("Edit news with id = " + news.getId());
+	    return true;
+	}
+	return false;
     }
 }

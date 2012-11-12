@@ -4,14 +4,12 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
-
 <span class="contentNewsTitle"><bean:message key="news.news" /></span>
 &gt;&gt;
 <bean:message key="news.add.title" />
-<br>
-<br>
+<br><br>
 
-<html:form>
+<html:form action="/SaveNews" onsubmit="return validateAddEditNewsForm(this)">
 	<table>
 		<tr>
 			<td class="newsTableTitles"><bean:message key='news.title' /></td>
@@ -32,12 +30,10 @@
 	</table>
 	<table class="newsListTable">
 		<tr>
-			<td class="afterTableButtons"><html:submit onclick="return validateAddEditNewsForm(this)">
+			<td class="afterTableButtons"><html:submit>
 					<bean:message key="news.save" />
 				</html:submit> <html:hidden name="newsForm" property="news.id" /></td>
-			<td><html:submit onclick="this.form.action='/Task1/Cancel.do'">
-					<bean:message key="news.cancel" />
-				</html:submit></td>
+			<td> <input type="button" value="<bean:message key="news.cancel"/>"  onclick="location.replace('Cancel.do')" /></td>
 		</tr>
 	</table>
 	<br>

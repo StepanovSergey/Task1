@@ -3,7 +3,6 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-
 <span class="contentNewsTitle"><bean:message key="news.news" /></span>
 &gt;&gt;
 <bean:message key="menu.news.list" />

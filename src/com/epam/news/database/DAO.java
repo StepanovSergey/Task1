@@ -59,10 +59,20 @@ public interface DAO {
     public int deleteManyNews(Integer[] ids);
 
     /**
+     * Delete one news
+     * 
      * @param id
      *            the id of news
      * @return number of affected rows. Must be equal 1.
      */
     public int deleteNews(int id);
+
+    /**
+     * Get news by its title
+     * @param newsTitle
+     *            title of news
+     * @return number of rows of news with given title
+     */
+    public int getByTitle(String newsTitle);
 
 }

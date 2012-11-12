@@ -57,7 +57,6 @@ function validateAddEditNewsForm(form) {
 			}
 		}
 	}
-	form.action="/Task1/SaveNews.do";
 	if (errorList.length == 0) {
 		return true;
 	} else {

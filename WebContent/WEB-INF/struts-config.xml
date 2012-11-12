@@ -67,6 +67,11 @@
 			type="org.springframework.web.struts.DelegatingActionProxy"
 			parameter="cancel" validate="false">
 		</action>
+		
+		<action path="/Back" name="newsForm"
+			type="org.springframework.web.struts.DelegatingActionProxy"
+			parameter="back" validate="false">
+		</action>
 
 	</action-mappings>
 
