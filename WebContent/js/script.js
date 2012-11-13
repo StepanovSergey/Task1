@@ -34,7 +34,7 @@ function validateAddEditNewsForm(form) {
 				}
 			}
 			if (element.name == "news.date") {
-				expr = new RegExp("^[0-9]{4}\-[0-9]{2}\-[0-9]{2}$");
+				expr = new RegExp(datePattern);
 				if (!(elementValue.match(expr))) {
 					errorList.push(5);
 				} else if (elementValue == "") {

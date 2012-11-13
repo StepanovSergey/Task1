@@ -7,9 +7,11 @@
 <span class="contentNewsTitle"><bean:message key="news.news" /></span>
 &gt;&gt;
 <bean:message key="news.add.title" />
-<br><br>
+<br>
+<br>
 
-<html:form action="/SaveNews" onsubmit="return validateAddEditNewsForm(this)">
+<html:form action="/SaveNews"
+	onsubmit="return validateAddEditNewsForm(this)">
 	<table>
 		<tr>
 			<td class="newsTableTitles"><bean:message key='news.title' /></td>
@@ -17,15 +19,17 @@
 		</tr>
 		<tr>
 			<td><bean:message key="news.date" /></td>
-			<td><html:text size="10" name="newsForm" property="news.date" /></td>
+			<td><html:text size="10" name="newsForm" property="dateString" /></td>
 		</tr>
 		<tr>
 			<td><bean:message key="news.brief" /></td>
-			<td><html:textarea rows="5" cols="100" name="newsForm" property="news.brief" /></td>
+			<td><html:textarea rows="5" cols="100" name="newsForm"
+					property="news.brief" /></td>
 		</tr>
 		<tr>
 			<td><bean:message key="news.content" /></td>
-			<td><html:textarea rows="10" cols="100" name="newsForm" property="news.content" /></td>
+			<td><html:textarea rows="10" cols="100" name="newsForm"
+					property="news.content" /></td>
 		</tr>
 	</table>
 	<table class="newsListTable">
@@ -33,7 +37,9 @@
 			<td class="afterTableButtons"><html:submit>
 					<bean:message key="news.save" />
 				</html:submit> <html:hidden name="newsForm" property="news.id" /></td>
-			<td> <input type="button" value="<bean:message key="news.cancel"/>"  onclick="location.replace('Cancel.do')" /></td>
+			<td><input type="button"
+				value="<bean:message key="news.cancel"/>"
+				onclick="location.replace('Cancel.do')" /></td>
 		</tr>
 	</table>
 	<br>

@@ -12,12 +12,13 @@
 
 	<!-- Global forwards -->
 	<global-forwards>
-		<forward name="mainPage" path="/NewsList.do" />
-		<forward name="newsList" path="newsList.page" />
-		<forward name="viewNews" path="viewNews.page" />
-		<forward name="addNews" path="addNews.page" />
-		<forward name="editNews" path="addNews.page" />
-		<forward name="error" path="error.page" />
+		<forward name="mainPage" path="/NewsList.do" redirect="true"/>
+		<forward name="newsList" path="newsList.page" redirect="true" />
+		<forward name="viewNews" path="viewNews.page" redirect="true" />
+		<forward name="addNews" path="addNews.page" redirect="true" />
+		<forward name="editNews" path="addNews.page" redirect="true" />
+		<forward name="error" path="error.page" redirect="true" />
+		<forward name="back" path="/Back.do" redirect="true" />
 	</global-forwards>
 
 	<!-- Actions -->
@@ -50,7 +51,7 @@
 
 		<action path="/DeleteNews" name="newsForm"
 			type="org.springframework.web.struts.DelegatingActionProxy"
-			parameter="deleteGroupOfNews">
+			parameter="deleteNews">
 		</action>
 
 		<action path="/AddNews" name="newsForm"

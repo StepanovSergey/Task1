@@ -32,6 +32,7 @@ public final class NewsAction extends MappingDispatchAction {
     private static final String ADD_NEWS_PAGE = "addNews";
     private static final String EDIT_NEWS_PAGE = "editNews";
     private static final String ERROR_PAGE = "error";
+    private static final String BACK_PAGE = "back";
     private static final String PREVIOUS_PAGE = "previousPage";
     private NewsDAO newsDao;
 
@@ -68,6 +69,7 @@ public final class NewsAction extends MappingDispatchAction {
     public ActionForward viewNewsList(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
+	saveToken(request);
 	String target = ERROR_PAGE;
 	request.getSession().setAttribute(PREVIOUS_PAGE, NEWS_LIST_PAGE);
 	NewsForm newsForm = (NewsForm) form;
@@ -97,13 +99,15 @@ public final class NewsAction extends MappingDispatchAction {
     public ActionForward addNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
+	saveToken(request);
 	String target = ADD_NEWS_PAGE;
 	NewsForm newsForm = (NewsForm) form;
 	News news = new News();
 	Calendar calendar = Calendar.getInstance();
 	Date today = new Date(calendar.getTimeInMillis());
+	// DateFormat format = DateFormat.getDateInstance();
 	news.setDate(today);
-	newsForm.setNews(news);
+	newsForm.setNews(news,getLocale(request));
 	return mapping.findForward(target);
     }
 
@@ -126,6 +130,7 @@ public final class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	String target = ERROR_PAGE;
+	saveToken(request);
 	if (setNewsDetails(request, form)) {
 	    target = EDIT_NEWS_PAGE;
 	}
@@ -150,6 +155,7 @@ public final class NewsAction extends MappingDispatchAction {
     public ActionForward viewNews(ActionMapping mapping, ActionForm form,
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
+	saveToken(request);
 	String target = ERROR_PAGE;
 	if (setNewsDetails(request, form)) {
 	    target = VIEW_NEWS_PAGE;
@@ -178,15 +184,19 @@ public final class NewsAction extends MappingDispatchAction {
 	    HttpServletRequest request, HttpServletResponse response)
 	    throws Exception {
 	String target = ERROR_PAGE;
-	NewsForm newsForm = (NewsForm) form;
-	if (newsForm != null) {
-	    int id = newsForm.getNews().getId();
-	    Integer[] ids = { id };
-	    int result = newsDao.deleteManyNews(ids);
-	    if (result == 1) {
-		target = MAIN_PAGE;
-		log.info("News delete with id = " + id);
+	if (isTokenValid(request, true)) {
+	    NewsForm newsForm = (NewsForm) form;
+	    if (newsForm != null) {
+		int id = newsForm.getNews().getId();
+		Integer[] ids = { id };
+		int result = newsDao.deleteManyNews(ids);
+		if (result == 1) {
+		    target = MAIN_PAGE;
+		    log.info("News delete with id = " + id);
+		}
 	    }
+	} else {
+	    target = BACK_PAGE;
 	}
 	return (mapping.findForward(target));
     }
@@ -211,16 +221,20 @@ public final class NewsAction extends MappingDispatchAction {
 	    ActionForm form, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 	String target = ERROR_PAGE;
-	if (form != null) {
-	    NewsForm newsForm = (NewsForm) form;
-	    Integer[] selectedItems = newsForm.getSelectedItems();
-	    if (selectedItems.length > 0) {
-		int result = newsDao.deleteManyNews(selectedItems);
-		if (result > 0) {
-		    target = MAIN_PAGE;
-		    log.info("News multiple delete");
+	if (isTokenValid(request, true)) {
+	    if (form != null) {
+		NewsForm newsForm = (NewsForm) form;
+		Integer[] selectedItems = newsForm.getSelectedItems();
+		if (selectedItems.length > 0) {
+		    int result = newsDao.deleteManyNews(selectedItems);
+		    if (result > 0) {
+			target = MAIN_PAGE;
+			log.info("News multiple delete");
+		    }
 		}
 	    }
+	} else {
+	    target = BACK_PAGE;
 	}
 	return (mapping.findForward(target));
     }
@@ -251,14 +265,18 @@ public final class NewsAction extends MappingDispatchAction {
 	    boolean result = false;
 	    if (id == 0) {
 		// add page save
-		String title = newsForm.getNews().getTitle();
-		int numRows = newsDao.getByTitle(title);
-		if (numRows == 0) {
+		if (isTokenValid(request, true)) {
 		    result = addNewsSaveButton(newsForm);
+		} else {
+		    target = BACK_PAGE;
 		}
 	    } else {
 		// edit page save
-		result = editNewsSaveButton(newsForm, id);
+		if (isTokenValid(request, true)) {
+		    result = editNewsSaveButton(newsForm, id);
+		} else {
+		    target = BACK_PAGE;
+		}
 	    }
 	    if (result) {
 		target = VIEW_NEWS_PAGE;
@@ -330,7 +348,7 @@ public final class NewsAction extends MappingDispatchAction {
 	if (newsForm != null) {
 	    int id = newsForm.getNews().getId();
 	    News news = newsDao.getById(id);
-	    newsForm.setNews(news);
+	    newsForm.setNews(news, getLocale(request));
 	    return true;
 	} else {
 	    return false;

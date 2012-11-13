@@ -1,5 +1,8 @@
 package com.epam.news.utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  * This class provides conversion between java.util.Date and java.sql.Date in
  * two sides
@@ -31,4 +34,69 @@ public class DateConverter {
 	long timeInMillis = utilDate.getTime();
 	return new java.sql.Date(timeInMillis);
     }
+
+    /**
+     * Convert java.util.Date to string. If pattern is null or it's length = 0,
+     * then pattern will be given by default locale
+     * 
+     * @param utilDate
+     *            java.util.Date to convert
+     * @param pattern
+     *            date pattern
+     * @return string representation of date in given pattern
+     */
+    public static String convert(java.util.Date utilDate, String pattern) {
+	DateFormat dateFormat = null;
+	if (isValidPattern(pattern)) {
+	    dateFormat = new SimpleDateFormat();
+	} else {
+	    dateFormat = new SimpleDateFormat(pattern);
+	}
+	return dateFormat.format(utilDate);
+    }
+
+    /**
+     * Convert java.sql.Date to string. If pattern is null or it's length = 0,
+     * then pattern will be given by default locale
+     * 
+     * @param sqlDate
+     *            java.sql.Date to convert
+     * @param pattern
+     *            date pattern
+     * @return string representation of date in given pattern
+     */
+    public static String convert(java.sql.Date sqlDate, String pattern) {
+	java.util.Date utilDate = convert(sqlDate);
+	return convert(utilDate, pattern);
+    }
+/*
+    public static java.util.Date convert(String dateString, String pattern) {
+	DateFormat dateFormat = null;
+	java.util.Date date = null;
+	if (isValidPattern(pattern)) {
+	    dateFormat = new SimpleDateFormat();
+	} else {
+	    dateFormat = new SimpleDateFormat(pattern);
+	}
+	try {
+	    date = dateFormat.parse(dateString);
+	} catch (ParseException e) {
+	    e.printStackTrace();
+	}
+	return date;
+    }
+
+    public static java.sql.Date convert(String dateString, String pattern) {
+	java.util.Date utilDate = convert(dateString, pattern);
+	return convert(utilDate);
+    }
+        */
+    private static boolean isValidPattern(String pattern){
+	if (pattern.isEmpty() || pattern == null) {
+	    return false;
+	} else {
+	    return true;
+	}
+    }
+
 }
