@@ -1,6 +1,7 @@
 package com.epam.news.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 /**
@@ -18,7 +19,7 @@ public class DateConverter {
      *            java.sql.Date to convert
      * @return java.util.Date date
      */
-    public static java.util.Date convert(java.sql.Date sqlDate) {
+    public static java.util.Date convertToDateUtil(java.sql.Date sqlDate) {
 	long timeInMillis = sqlDate.getTime();
 	return new java.util.Date(timeInMillis);
     }
@@ -30,7 +31,7 @@ public class DateConverter {
      *            java.util.Date to convert
      * @return java.sql.Date date
      */
-    public static java.sql.Date convert(java.util.Date utilDate) {
+    public static java.sql.Date convertToDateSql(java.util.Date utilDate) {
 	long timeInMillis = utilDate.getTime();
 	return new java.sql.Date(timeInMillis);
     }
@@ -45,7 +46,7 @@ public class DateConverter {
      *            date pattern
      * @return string representation of date in given pattern
      */
-    public static String convert(java.util.Date utilDate, String pattern) {
+    public static String convertToString(java.util.Date utilDate, String pattern) {
 	DateFormat dateFormat = null;
 	if (isValidPattern(pattern)) {
 	    dateFormat = new SimpleDateFormat();
@@ -65,12 +66,12 @@ public class DateConverter {
      *            date pattern
      * @return string representation of date in given pattern
      */
-    public static String convert(java.sql.Date sqlDate, String pattern) {
-	java.util.Date utilDate = convert(sqlDate);
-	return convert(utilDate, pattern);
+    public static String convertToString(java.sql.Date sqlDate, String pattern) {
+	java.util.Date utilDate = convertToDateUtil(sqlDate);
+	return convertToString(utilDate, pattern);
     }
-/*
-    public static java.util.Date convert(String dateString, String pattern) {
+
+    public static java.util.Date convertToDateUtil(String dateString, String pattern) {
 	DateFormat dateFormat = null;
 	java.util.Date date = null;
 	if (isValidPattern(pattern)) {
@@ -86,11 +87,11 @@ public class DateConverter {
 	return date;
     }
 
-    public static java.sql.Date convert(String dateString, String pattern) {
-	java.util.Date utilDate = convert(dateString, pattern);
-	return convert(utilDate);
+    public static java.sql.Date convertToDateSql(String dateString, String pattern) {
+	java.util.Date utilDate = convertToDateUtil(dateString, pattern);
+	return convertToDateSql(utilDate);
     }
-        */
+        
     private static boolean isValidPattern(String pattern){
 	if (pattern.isEmpty() || pattern == null) {
 	    return false;

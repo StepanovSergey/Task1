@@ -49,13 +49,12 @@ public class NewsForm extends ActionForm {
      */
     public void setDateString(String dateString) {
 	if (dateString != null && !dateString.isEmpty()) {
-	    ResourceBundle bundle = ResourceBundle.getBundle(RESOURCES,
-		    new Locale(lang));
+	    ResourceBundle bundle = ResourceBundle.getBundle(RESOURCES);
 	    String pattern = bundle.getString(datePattern);
 	    DateFormat dateFormat = new SimpleDateFormat(pattern);
 	    try {
 		java.util.Date date = dateFormat.parse(dateString);
-		Date sqlDate = DateConverter.convert(date);
+		Date sqlDate = DateConverter.convertToDateSql(date);
 		news.setDate(sqlDate);
 	    } catch (ParseException e) {
 		if (log.isDebugEnabled()) {

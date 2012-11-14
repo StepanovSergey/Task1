@@ -75,18 +75,30 @@ public final class NewsDAO implements INewsDao {
     public int addNews(News news) {
 	Connection connection = ConnectionPool.getConnection();
 	PreparedStatement preparedStatement = null;
+	ResultSet set = null;
 	int result = 0;
 	try {
-	    preparedStatement = connection.prepareStatement(addNewsQuery);
+	    preparedStatement = connection.prepareStatement(addNewsQuery,
+		    new String[] { "ID" });
 	    preparedStatement.setString(1, news.getTitle());
 	    preparedStatement.setDate(2, news.getDate());
 	    preparedStatement.setString(3, news.getBrief());
 	    preparedStatement.setString(4, news.getContent());
 	    result = preparedStatement.executeUpdate();
+	    if (result > 0) {
+		set = preparedStatement.getGeneratedKeys();
+		if (set.next()) {
+		    return set.getInt(1);
+		} else {
+		    throw new SQLException("Id is not generated");
+		}
+	    } else {
+		throw new SQLException("No news added");
+	    }
 	} catch (SQLException e) {
 	    log.error(e.getMessage(), e);
 	} finally {
-	    releaseResources(null, preparedStatement, null);
+	    releaseResources(null, preparedStatement, set);
 	    ConnectionPool.releaseConnection(connection);
 	}
 	return result;
@@ -230,6 +242,5 @@ public final class NewsDAO implements INewsDao {
 	    }
 	}
     }
-
 
 }

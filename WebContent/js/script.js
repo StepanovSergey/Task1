@@ -21,6 +21,7 @@ function confirmDialog() {
 function validateAddEditNewsForm(form) {
 	var element, elementName, elementValue;
 	var errorList = [];
+	debugger;
 	for ( var i = 0; i < form.elements.length; i++) {
 		element = form.elements[i];
 		elementName = element.nodeName.toLowerCase();
@@ -33,7 +34,7 @@ function validateAddEditNewsForm(form) {
 					errorList.push(6);
 				}
 			}
-			if (element.name == "news.date") {
+			if (element.name == "dateString") {
 				expr = new RegExp(datePattern);
 				if (!(elementValue.match(expr))) {
 					errorList.push(5);
