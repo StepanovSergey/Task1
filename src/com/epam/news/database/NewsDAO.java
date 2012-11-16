@@ -20,12 +20,11 @@ import com.epam.news.bean.News;
  */
 public final class NewsDAO implements INewsDao {
     private static final Logger log = Logger.getLogger(NewsDAO.class);
-    private static final String getAllQuery = "SELECT * FROM news ORDER BY news_date desc";
-    private static final String getByIdQuery = "SELECT * FROM news WHERE id=?";
-    private static final String addNewsQuery = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
-    private static final String updateNewsQuery = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";
-    private static final String deleteManyNewsQuery = "DELETE FROM news WHERE id IN (";
-    private static final String getByTitleNewsQuery = "SELECT title FROM news WHERE title = ?";
+    private static final String GET_ALL_QUERY = "SELECT * FROM news ORDER BY news_date desc";
+    private static final String GET_BY_ID_QUERY = "SELECT * FROM news WHERE id=?";
+    private static final String ADD_NEWS_QUERY = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
+    private static final String UPDATE_NEWS_QUERY = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";
+    private static final String DELETE_MANY_NEWS_QUERY = "DELETE FROM news WHERE id IN (";
 
     @Override
     public List<News> getAll() {
@@ -35,7 +34,7 @@ public final class NewsDAO implements INewsDao {
 	ResultSet resultSet = null;
 	try {
 	    statement = connection.createStatement();
-	    resultSet = statement.executeQuery(getAllQuery);
+	    resultSet = statement.executeQuery(GET_ALL_QUERY);
 	    while (resultSet.next()) {
 		News news = setParameters(resultSet);
 		allNews.add(news);
@@ -56,7 +55,7 @@ public final class NewsDAO implements INewsDao {
 	PreparedStatement preparedStatement = null;
 	ResultSet resultSet = null;
 	try {
-	    preparedStatement = connection.prepareStatement(getByIdQuery);
+	    preparedStatement = connection.prepareStatement(GET_BY_ID_QUERY);
 	    preparedStatement.setInt(1, id);
 	    resultSet = preparedStatement.executeQuery();
 	    while (resultSet.next()) {
@@ -78,7 +77,7 @@ public final class NewsDAO implements INewsDao {
 	ResultSet set = null;
 	int result = 0;
 	try {
-	    preparedStatement = connection.prepareStatement(addNewsQuery,
+	    preparedStatement = connection.prepareStatement(ADD_NEWS_QUERY,
 		    new String[] { "ID" });
 	    preparedStatement.setString(1, news.getTitle());
 	    preparedStatement.setDate(2, news.getDate());
@@ -110,7 +109,7 @@ public final class NewsDAO implements INewsDao {
 	PreparedStatement preparedStatement = null;
 	int result = 0;
 	try {
-	    preparedStatement = connection.prepareStatement(updateNewsQuery);
+	    preparedStatement = connection.prepareStatement(UPDATE_NEWS_QUERY);
 	    preparedStatement.setString(1, news.getTitle());
 	    preparedStatement.setDate(2, news.getDate());
 	    preparedStatement.setString(3, news.getBrief());
@@ -144,28 +143,6 @@ public final class NewsDAO implements INewsDao {
 	return result;
     }
 
-    @Override
-    public int getByTitle(String newsTitle) {
-	Connection connection = ConnectionPool.getConnection();
-	PreparedStatement preparedStatement = null;
-	int result = 0;
-	try {
-	    preparedStatement = connection
-		    .prepareStatement(getByTitleNewsQuery);
-	    preparedStatement.setString(1, newsTitle);
-	    ResultSet resultSet = preparedStatement.executeQuery();
-	    while (resultSet.next()) {
-		result++;
-	    }
-	} catch (SQLException e) {
-	    log.error(e.getMessage(), e);
-	} finally {
-	    releaseResources(null, preparedStatement, null);
-	    ConnectionPool.releaseConnection(connection);
-	}
-	return result;
-    }
-
     /**
      * Create query for deleting many news by one query
      * 
@@ -174,7 +151,7 @@ public final class NewsDAO implements INewsDao {
      * @return string query for deleting many news
      */
     private String createDeleteManyNewsQuery(Integer[] ids) {
-	StringBuffer query = new StringBuffer(deleteManyNewsQuery);
+	StringBuffer query = new StringBuffer(DELETE_MANY_NEWS_QUERY);
 	Integer lastId = ids[ids.length - 1];
 	for (Integer id : ids) {
 	    query.append(id);
