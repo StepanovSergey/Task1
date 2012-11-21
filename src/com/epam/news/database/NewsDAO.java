@@ -20,7 +20,7 @@ import com.epam.news.bean.News;
  */
 public final class NewsDAO implements INewsDao {
     private static final Logger log = Logger.getLogger(NewsDAO.class);
-    private static final String GET_ALL_QUERY = "SELECT * FROM news ORDER BY news_date desc";
+    private static final String GET_ALL_QUERY = "SELECT * FROM news ORDER BY news_date desc,id desc";
     private static final String GET_BY_ID_QUERY = "SELECT * FROM news WHERE id=?";
     private static final String ADD_NEWS_QUERY = "INSERT INTO news(title,news_date,brief,content) VALUES (?,?,?,?)";
     private static final String UPDATE_NEWS_QUERY = "UPDATE news SET title=?, news_date=?, brief=?, content=? WHERE id=?";
