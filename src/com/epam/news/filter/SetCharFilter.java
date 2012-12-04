@@ -13,25 +13,28 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
- * Filter changes encoding to UTF-8
+ * This class provides filter that changes encoding to UTF-8
  * 
  * @author Siarhei_Stsiapanau
  * 
+ * 
  */
 public class SetCharFilter implements Filter {
-    private static final boolean debug = true;
+    private static final boolean debug = false;
     private String encoding = "UTF-8";
     private FilterConfig filterConfig = null;
 
-    public SetCharFilter() {
-    }
-
     /**
+     * What to do before processing this filter
      * 
      * @param request
+     *            current request
      * @param response
+     *            current response
      * @throws IOException
+     *             if something wrong
      * @throws ServletException
+     *             if something wrong
      */
     private void doBeforeProcessing(ServletRequest request,
 	    ServletResponse response) throws IOException, ServletException {
@@ -41,11 +44,16 @@ public class SetCharFilter implements Filter {
     }
 
     /**
+     * What to do after processing this filter
      * 
      * @param request
+     *            current request
      * @param response
+     *            current response
      * @throws IOException
+     *             if something wrong
      * @throws ServletException
+     *             if something wrong
      */
     private void doAfterProcessing(ServletRequest request,
 	    ServletResponse response) throws IOException, ServletException {
@@ -55,12 +63,10 @@ public class SetCharFilter implements Filter {
     }
 
     /**
+     * Filter processing. Change request encoding to encoding setted in web.xml
      * 
-     * @param request
-     * @param response
-     * @param chain
-     * @throws IOException
-     * @throws ServletException
+     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
+     *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
@@ -93,31 +99,37 @@ public class SetCharFilter implements Filter {
     }
 
     /**
+     * Set filter config
      * 
-     * @return
+     * @return filter config
      */
     public FilterConfig getFilterConfig() {
 	return (this.filterConfig);
     }
 
     /**
+     * Get filter config
      * 
      * @param filterConfig
+     *            filter config to set
      */
     public void setFilterConfig(FilterConfig filterConfig) {
 	this.filterConfig = filterConfig;
     }
 
-    /**
-	     *
-	     */
+    /*
+     * (non-Javadoc)
+     * 
+     * @see javax.servlet.Filter#destroy()
+     */
     @Override
     public void destroy() {
     }
 
     /**
+     * Init this filter
      * 
-     * @param filterConfig
+     * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
      */
     @Override
     public void init(FilterConfig filterConfig) {
@@ -131,9 +143,10 @@ public class SetCharFilter implements Filter {
 	}
     }
 
-    /**
+    /*
+     * (non-Javadoc)
      * 
-     * @return
+     * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
@@ -147,9 +160,12 @@ public class SetCharFilter implements Filter {
     }
 
     /**
+     * Prints error if error occurred
      * 
      * @param t
+     *            error throwable
      * @param response
+     *            current response
      */
     private void sendProcessingError(Throwable t, ServletResponse response) {
 	String stackTrace = getStackTrace(t);
@@ -180,9 +196,11 @@ public class SetCharFilter implements Filter {
     }
 
     /**
+     * Get stack trace of throwable
      * 
      * @param t
-     * @return
+     *            throwable to get stack trace
+     * @return string representation of stack trace
      */
     public static String getStackTrace(Throwable t) {
 	String stackTrace = null;
@@ -199,8 +217,10 @@ public class SetCharFilter implements Filter {
     }
 
     /**
+     * Print message to log
      * 
      * @param msg
+     *            message to print
      */
     public void log(String msg) {
 	filterConfig.getServletContext().log(msg);

@@ -1,5 +1,6 @@
 package com.epam.news.bean;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
@@ -8,7 +9,8 @@ import java.sql.Date;
  * @author Siarhei_Stsiapanau
  * 
  */
-public class News {
+public class News implements Serializable {
+    private static final long serialVersionUID = 9153424252861600528L;
     private int id;
     private String title;
     private Date date;
